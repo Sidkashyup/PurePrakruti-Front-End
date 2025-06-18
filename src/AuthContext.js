@@ -92,8 +92,9 @@ export const AuthProvider = ({ children }) => {
   // Signup function
   const signup = async (userData) => {
     try {
-      const res = await axios.post("https://pureprakruti.com/api/auth/signup", userData);
-      alert(res.data.message);
+      const res = await axios.post("http://localhost:4500/api/auth/signup", userData);
+console.log('#$$$$$%^&%$#',res.data);
+      // alert(res.data.message);
       navigate("/login");
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);
@@ -104,7 +105,7 @@ export const AuthProvider = ({ children }) => {
   // Login function
   const login = async (credentials) => {
     try {
-      const res = await axios.post("https://pureprakruti.com/api/auth/login", credentials);
+      const res = await axios.post("http://localhost:4500/api/auth/login", credentials);
       // console.log("Login response data:", res.data.data.token);
       const { token } = res.data.data;
 
@@ -137,13 +138,13 @@ export const AuthProvider = ({ children }) => {
         alert("User not found, please sign up.");
       }
       console.error("Login error*********:", error.response?.data || error.message);
-      alert("Eroor:", error.response?.data?.message || "Login failed");
+      alert("Error:", error.response?.data?.message || "Login failed");
     }
   };
 
   // Google Login function
   const googleLogin = () => {
-    window.location.href = "https://pureprakruti.com/auth/google";
+    window.location.href = "http://localhost:4500/auth/google";
   };
 
   return (

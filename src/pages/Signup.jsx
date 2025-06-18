@@ -1,10 +1,8 @@
-import React, { useState ,useContext} from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import forest from "../resource/forest.png";
-import google from "../resource/google.png";
 import { AuthContext } from "./../AuthContext";
-
+import google from "../resource/google.png";
+const axios = require("axios");
 
 export default function Signup() {
   const { signup, googleLogin } = useContext(AuthContext);
@@ -16,135 +14,218 @@ export default function Signup() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // For redirection
+  const navigate = useNavigate();
+  const [showOtpLogin, setShowOtpLogin] = useState(false);
+  const [otpMobile, setOtpMobile] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState("");
 
-  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Validate phone number (Indian format - 10 digits)
-  const isValidPhoneNumber = (number) => {
-    return /^[6-9]\d{9}$/.test(number);
-  };
-
   const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("Submitting signup form:", formData); 
-    await signup(formData);
+    if (formData.pin !== formData.confirmPin) {
+      setError("PIN and Confirm PIN do not match");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await signup(formData);
+    } catch (err) {
+      setError(err.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Handle signup
-  // const handleSignup = async (e) => {
-  //   e.preventDefault();
-  //   setError("");
+  const sendOtp = async () => {
+    setOtpError("");
+    if (!otpMobile) {
+      setOtpError("Please enter mobile number");
+      return;
+    }
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(otpMobile)) {
+      setOtpError("Please enter a valid 10-digit mobile number");
+      return;
+    }
+    setOtpLoading(true);
+    try {
+      await axios.post("/api/otp/send", { mobileNumber: otpMobile });
+      setOtpSent(true);
+    } catch (e) {
+      setOtpError(e.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
 
-  //   // Validate inputs
-  //   if (!formData.userName || !formData.mobileNumber || !formData.pin || !formData.confirmPin) {
-  //     setError("All fields are required.");
-  //     return;
-  //   }
-  //   if (!isValidPhoneNumber(formData.mobileNumber)) {
-  //     setError("Enter a valid 10-digit phone number.");
-  //     return;
-  //   }
-  //   if (formData.pin.length < 4) {
-  //     setError("PIN must be at least 4 digits.");
-  //     return;
-  //   }
-  //   if (formData.pin !== formData.confirmPin) {
-  //     setError("PIN and Confirm PIN must match.");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.post("https://pureprakruti.com/api/auth/signup", {
-  //       userName: formData.userName,
-  //       mobileNumber: formData.mobileNumber,
-  //       pin: formData.pin,
-  //     });
-  //     // alert("Signup Successful! Redirecting to login...");
-  //     navigate("/login"); 
-  //   } catch (err) {
-  //     setError("Signup failed. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
+  const verifyOtp = async () => {
+    setOtpError("");
+    if (!otp) {
+      setOtpError("Please enter OTP");
+      return;
+    }
+    setOtpLoading(true);
+    try {
+      const res = await axios.post("/api/otp/verify", { mobileNumber: otpMobile, otp });
+      if (res.data.success) {
+        setOtpSent(false);
+        alert("OTP verified! Please complete the form to finish signup.");
+        setFormData({ ...formData, mobileNumber: otpMobile });
+        setShowOtpLogin(false);
+      } else {
+        setOtpError("Invalid OTP");
+      }
+    } catch (e) {
+      setOtpError(e.response?.data?.message || "OTP verification failed");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
 
   return (
-    <div className="w-screen flex items-center justify-center min-h-screen bg-green-100">
-      <div className="bg-white rounded-lg shadow-lg flex w-[700px] overflow-hidden">
-        
-        {/* Left Side: Image */}
-        <div className="w-1/2 m-4">
-          <img src={forest} alt="Eco-Friendly Signup" className="w-full h-full object-cover" />
-        </div>
+    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center relative pt-[70px]">
+      <img
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        src="/bglogin3.jpg"
+        alt="Background image"
+      />
 
-        {/* Right Side: Form */}
-        <div className="w-1/2 p-6 flex flex-col justify-center">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">Sign Up</h2>
+      <div className="relative bg-green-900/60 backdrop-blur-md border border-white/60 rounded-xl shadow-xl max-w-sm sm:max-w-md md:max-w-lg w-full p-6 sm:p-8 md:p-10 m-2 sm:m-4">
+        <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-6 text-center">Sign Up</h2>
 
-          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
 
-          <label className="text-gray-600 text-sm">User Name</label>
-          <input
-            type="text"
-            name="userName"
-            value={formData.userName}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            className="w-full px-3 py-2 border rounded-md mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
+        <form onSubmit={handleSignup} className="flex flex-col gap-4">
+          <div>
+            <label className="text-white text-lg">User Name</label>
+            <input
+              type="text"
+              name="userName"
+              value={formData.userName}
+              onChange={handleChange}
+              placeholder="Enter your name"
+              className="w-full px-3 py-3 text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 text-lg"
+            />
+          </div>
 
-          <label className="text-gray-600 text-sm">Phone Number</label>
-          <input
-            type="text"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-            placeholder="Enter 10-digit phone number"
-            className="w-full px-3 py-2 border rounded-md mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
+          <div>
+            <label className="text-white text-lg">Phone Number</label>
+            <input
+              type="text"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleChange}
+              placeholder="Enter 10-digit phone number"
+              className="w-full px-3 py-3 text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 text-lg"
+            />
+          </div>
 
-          <label className="text-gray-600 text-sm">PIN</label>
-          <input
-            type="password"
-            name="pin"
-            value={formData.pin}
-            onChange={handleChange}
-            placeholder="Create a secure PIN"
-            className="w-full px-3 py-2 border rounded-md mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
+          <div>
+            <label className="text-white text-lg">PIN</label>
+            <input
+              type="password"
+              name="pin"
+              value={formData.pin}
+              onChange={handleChange}
+              placeholder="Create a secure PIN"
+              className="w-full px-3 py-3 text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 text-lg"
+            />
+          </div>
 
-          <label className="text-gray-600 text-sm">Confirm PIN</label>
-          <input
-            type="password"
-            name="confirmPin"
-            value={formData.confirmPin}
-            onChange={handleChange}
-            placeholder="Re-enter your PIN"
-            className="w-full px-3 py-2 border rounded-md mt-1 mb-4 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
+          <div>
+            <label className="text-white text-lg">Confirm PIN</label>
+            <input
+              type="password"
+              name="confirmPin"
+              value={formData.confirmPin}
+              onChange={handleChange}
+              placeholder="Re-enter your PIN"
+              className="w-full px-3 py-3 text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 mb-4 focus:outline-none focus:ring-2 focus:ring-green-400 text-lg"
+            />
+          </div>
 
           <button
-            onClick={handleSignup}
-            className={`w-full text-white py-2 rounded-md ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-700 hover:bg-green-800"
-            } transition`}
+            type="submit"
             disabled={loading}
+            className={`w-full text-white py-3 text-xl rounded-md ${
+              loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
+            } transition`}
           >
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
+        </form>
 
-          {/* <button onClick={googleLogin} className="w-full flex items-center justify-center bg-blue-600 text-white py-2 rounded-md mt-3 hover:bg-blue-700 transition">
-            <img src={google} alt="Google" className="w-5 h-5 mr-2" />
-            Sign Up with Google
-          </button> */}
-        </div>
+        <p className="text-white text-center mt-4">
+          Already have an account?{" "}
+          <a href="/login" className="text-green-200 hover:underline">
+            Log In
+          </a>
+        </p>
+
+        <button
+          onClick={googleLogin}
+          className="w-full flex items-center justify-center text-xl mx-auto border-2 border-white my-4 bg-green-700/40 backdrop-blur-md text-white px-6 py-3 rounded-md hover:bg-green-900/50 focus:ring-2 focus:ring-blue-300 transition"
+        >
+          <img src={google} alt="Google" className="w-7 h-7 mr-2" />
+          Sign Up with Google
+        </button>
+
+        <button
+          onClick={() => setShowOtpLogin((prev) => !prev)}
+          className="w-full text-white flex items-center justify-center text-xl mx-auto border-2 border-white my-4 bg-green-700/30 backdrop-blur-md px-6 py-3 rounded-md hover:bg-green-900/50 focus:ring-2 focus:ring-blue-300 transition"
+        >
+          Sign Up with OTP
+        </button>
+
+        {showOtpLogin && (
+          <div className="mt-4 p-0 rounded-md">
+            <input
+              type="text"
+              placeholder="Enter Mobile Number"
+              value={otpMobile}
+              onChange={(e) => setOtpMobile(e.target.value)}
+              className="w-full px-3 py-3 text-lg text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+            {!otpSent ? (
+              <button
+                onClick={sendOtp}
+                disabled={otpLoading}
+                className={`w-full py-3 rounded-md text-white text-xl mt-4 ${
+                  otpLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
+                }`}
+              >
+                {otpLoading ? "Sending OTP..." : "Send OTP"}
+              </button>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="w-full px-3 py-2 mb-2 rounded-md text-black"
+                />
+                <button
+                  onClick={verifyOtp}
+                  disabled={otpLoading}
+                  className={`w-full text-white py-3 text-xl rounded-md mt-4 ${
+                    otpLoading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+                  } transition`}
+                >
+                  {otpLoading ? "Verifying OTP..." : "Verify OTP"}
+                </button>
+              </>
+            )}
+            {otpError && <p className="text-red-400 mt-2">{otpError}</p>}
+          </div>
+        )}
       </div>
     </div>
   );

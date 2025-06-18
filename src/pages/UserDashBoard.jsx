@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from "../AuthContext";
 import { Chart } from 'react-google-charts';
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 import { FileText } from "lucide-react";
 
 import natureImg from '../resource/natureImg.png';
@@ -27,6 +27,26 @@ export const UserDashBoard = () => {
 
   const [timeFilter, setTimeFilter] = useState("All");
   const [filteredData, setFilteredData] = useState([]);
+  const data = React.useMemo(() => {
+    if (routeWiseEmissionData.length === 0) {
+      return [["Route", "Emission"], ["No Data", 1]];
+    }
+    const sorted = [...routeWiseEmissionData].sort((a, b) => b.totalEmission - a.totalEmission);
+    const top10 = sorted.slice(0, 10);
+    const othersSum = sorted.slice(10).reduce((sum, route) => sum + route.totalEmission, 0);
+
+    const chartData = [
+      ["Route", "Emission"],
+      ...top10.map((route) => [route.route, route.totalEmission]),
+    ];
+
+    if (othersSum > 0) {
+      chartData.push(["Others", othersSum]);
+    }
+
+    return chartData;
+  }, [routeWiseEmissionData]);
+
 
 
   useEffect(() => {
@@ -38,9 +58,9 @@ export const UserDashBoard = () => {
     const fetchCarbonFootprintData = async () => {
       try {
         const [response1, response2, routeResponse] = await Promise.all([
-          fetch(`https://pureprakruti.com/api/vehicle/carbonfootprint/dieselvehicles/${userId}`),
-          fetch(`https://pureprakruti.com/api/vehicle/carbonfootprint/dieselvehicles1/${userId}`),
-          fetch(`https://pureprakruti.com/api/vehicle/routewiseEmission/${userId}`)
+          fetch(`http://localhost:4500/api/vehicle/carbonfootprint/dieselvehicles/${userId}`),
+          fetch(`http://localhost:4500/api/vehicle/carbonfootprint/dieselvehicles1/${userId}`),
+          fetch(`http://localhost:4500/api/vehicle/routewiseEmission/${userId}`)
         ]);
 
         if (!response1.ok) throw new Error(`Failed to fetch dieselvehicles data ${error}`);
@@ -112,7 +132,7 @@ export const UserDashBoard = () => {
     try {
       // Construct the URL for the API call with selected filters
       const response = await fetch(
-        `https://pureprakruti.com/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
+        `http://localhost:4500/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
       );
 
       if (!response.ok) {
@@ -128,7 +148,7 @@ export const UserDashBoard = () => {
 
       // Create CSV content
       const csvContent = [
-        ["Date", "Vehicle Number", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated"],
+        ["Date", "Vehicle_Number", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated"],
         ...data.carbonFootprintData.map((item) => [
           item.date,
           item.vehicleNumber,
@@ -168,22 +188,22 @@ export const UserDashBoard = () => {
   const totalVehicles = dieselVehiclesData1.length;
   const totalEmission = dieselVehiclesData.reduce((total, item) => total + parseFloat(item.carbonFootprint), 0);
 
-  const data = routeWiseEmissionData.length > 0
-    ? [
-      ["Route", "Emission"],
-      ...routeWiseEmissionData.map((route) => [route.route, route.totalEmission]),
-    ]
-    : [["Route", "Emission"], ["No Data", 1]]; // Placeholder data to avoid errors
+  // const data = routeWiseEmissionData.length > 0
+  //   ? [
+  //     ["Route", "Emission"],
+  //     ...routeWiseEmissionData.map((route) => [route.route, route.totalEmission]),
+  //   ]
+  //   : [["Route", "Emission"], ["No Data", 1]]; // Placeholder data to avoid errors
 
 
   const options = {
-    title: "Route-wise Emissions",
+    title: "",
     titleTextStyle: {
-      fontSize: 18,
+      fontSize: 30,
       bold: true,
       color: "#FFFFFF",
     },
-    backgroundColor: "white",
+    backgroundColor: "#e3ffea",
     pieHole: 0, // Full pie (0) or donut (0.4)
     slices: {
       0: { color: "#007bff" }, // Blue
@@ -195,7 +215,7 @@ export const UserDashBoard = () => {
     },
     legend: {
       position: "labeled",
-      textStyle: { fontSize: 12 },
+      textStyle: { fontSize: 14 },
     },
     pieSliceText: "percentage",
     chartArea: { width: "80%", height: "75%" },
@@ -208,33 +228,26 @@ export const UserDashBoard = () => {
     <div className='w-screen'>
       <div
         style={{ backgroundImage: `url(${natureImg})` }}
-        className="w-full min-h-[150px] bg-cover bg-center bg-no-repeat text-white p-6 text-center flex flex-wrap items-center justify-between"
+        className="w-full min-h-[100px] bg-cover bg-center bg-no-repeat text-white p-6 text-center flex flex-wrap items-center justify-between"
       >
         <div className="text-lg md:text-2xl lg:text-3xl font-bold w-full md:w-[30%] lg:w-[20%] text-center md:text-left">
           Carbon Emission Analysis
         </div>
-
-        <div className="flex items-center justify-center md:justify-end w-full md:w-[70%] lg:w-[80%] mt-4 md:mt-0">
-          <div className="bg-green-500 p-3 md:p-4 rounded-full text-white font-bold">
-            <span className="text-xl md:text-2xl">🚛</span>
-          </div>
-          {userName && (
-            <div className="ml-3 md:ml-4">
-              <h3 className="text-sm md:text-lg lg:text-xl font-semibold text-green-700">
-                {userName}
-              </h3>
-            </div>
-          )}
-        </div>
       </div>
 
 
+      <div className="min-h-full px-24 py-8 relative">
+        <div>
+          
+          <img className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-90" src="/bglogin3.jpg" alt="Background image" />
+          {/* <div className=" relative text-lg md:text-2xl lg:text-3xl font-bold w-full md:w-[30%] lg:w-[20%] text-center md:text-left text-white mt-4 mb-12">
+          Carbon Emission Analysis
+        </div> */}
 
-      <div className="bg-green-100 min-h-full px-24 py-4">
-
+          
 
         <motion.div
-          className="flex justify-center mt-4 px-16"
+          className="flex justify-center mt-4 px-40 relative"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
@@ -248,59 +261,61 @@ export const UserDashBoard = () => {
               )} */}
 
               <motion.div
-                className="bg-gradient-to-r from-green-600 to-green-800 p-6 rounded-xl shadow-lg w-full sm:w-[300px] text-center border border-green-500 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-green-600/80 to-green-900 p-6 rounded-xl shadow-lg w-full sm:w-[350px] text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <div className="font-bold text-lg text-white">{`🚛 GreenLine Freight: ${topEmittingVehicle?.vehicleNumber ?? 'N/A'}`}</div>
-                <h1 className="text-gray-200 text-sm mt-2">Top Emitting Vehicle</h1>
+                <div className="font-bold text-xl text-white">{`🚛 GreenLine Freight: ${topEmittingVehicle?.vehicleNumber ?? 'N/A'}`}</div>
+                <h1 className="text-gray-200 text-lg mt-2">Top Emitting Vehicle</h1>
               </motion.div>
 
               {/* Total Vehicles */}
               <motion.div
-                className="bg-gradient-to-r from-green-600 to-green-800 p-6 rounded-xl shadow-lg w-full sm:w-[300px] text-center border border-green-500 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg w-full sm:w-[350px] text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <div className="font-bold text-lg text-white">{`🚗 Total Vehicles: ${totalVehicles}`}</div>
-                <h1 className="text-gray-200 text-sm mt-2">Total Vehicles Registered</h1>
+                <div className="font-bold text-xl text-white">{`🚗 Total Vehicles: ${totalVehicles}`}</div>
+                <h1 className="text-gray-200 text-lg mt-2">Total Vehicles Registered</h1>
               </motion.div>
 
               {/* Total Carbon Emission */}
               <motion.div
-                className="bg-gradient-to-r from-green-600 to-green-800 p-6 rounded-xl shadow-lg w-full sm:w-[300px] text-center border border-green-500 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg w-full sm:w-[350px] text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
-                <div className="font-bold text-lg text-white">{`🌱 Total Emission: ${totalEmission.toFixed(2)} kg`}</div>
-                <h1 className="text-gray-200 text-sm mt-2">Total Carbon Emission</h1>
+                <div className="font-bold text-xl text-white">{`🌱 Total Emission: ${totalEmission.toFixed(2)} kg`}</div>
+                <h1 className="text-gray-200 text-lg mt-2">Total Carbon Emission</h1>
               </motion.div>
             </div>
           </div>
         </motion.div>
+        </div>
 
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-full-lg mx-auto mt-12"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-full-lg mx-auto mt-16 relative"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="bg-white p-4 rounded-lg shadow-md w-full">
-            <h2 className="text-lg font-bold text-white mb-2 bg-green-600 text-center">Emission Over Time</h2>
-            <div className="w-full min-h-[300px] flex flex-col items-center justify-center">
+          <div className="bg-gradient-to-r from-green-700 to-green-900 p-4 rounded-xl shadow-lg w-fullrounded-lg border border-gray-300 w-full">
+            <h2 className="text-2xl font-bold text-white mb-2 text-center">Emission Over Time</h2>
+            <div className="w-full min-h-[400px] flex flex-col items-center justify-center">
               {filteredData.length > 0 ? (
                 <Chart
                   chartType="ColumnChart"
                   width="100%"
-                  height="300px"
+                  height="350px"
                   options={{
                     colors: ["#004d0d"], // Green color
                     legend: { position: "none" }, // Hide legend if not needed
                     chartArea: { width: "80%" }, // Adjust chart area
+                     backgroundColor: '#e3ffea'
                   }}
                   data={[
                     ["Date", "CO2 Emission (kg)"],
@@ -319,7 +334,7 @@ export const UserDashBoard = () => {
                   <button
                     key={filter}
                     onClick={() => setTimeFilter(filter)}
-                    className={`px-4 py-2 rounded transition duration-200 ${timeFilter === filter ? "bg-green-600 text-white" : "bg-gray-300"
+                    className={`px-4 py-2 rounded transition duration-200 ${timeFilter === filter ? "bg-green-600 text-white" : "bg-green-100"
                       } ${filteredData.length === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
                     disabled={filteredData.length === 0} // Disable buttons if no data
                   >
@@ -330,13 +345,14 @@ export const UserDashBoard = () => {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-md w-full">
-            <h2 className="text-lg font-bold mb-2 text-white bg-green-600 text-center">
+          <div className="bg-gradient-to-r from-green-800 to-green-900 p-4 rounded-xl shadow-lg w-fullrounded-lg border border-gray-300 w-full">
+            <h2 className="text-2xl font-bold mb-2 text-white text-center">
               Route-wise Emissions
             </h2>
-            <div className="w-full min-h-[300px] flex justify-center items-center">
+            
+            <div className="w-full min-h-[350px] flex justify-center items-center">
               {routeWiseEmissionData.length > 0 ? (
-                <Chart chartType="PieChart" width="100%" height="300px" data={data} options={options} />
+                <Chart chartType="PieChart" width="100%" height="370px" data={data}  options={options}  />
               ) : (
                 <p className="text-gray-500 text-lg">No data available</p>
               )}
@@ -346,38 +362,38 @@ export const UserDashBoard = () => {
         </motion.div>
 
         <motion.div
-          className="bg-white p-4 rounded-lg shadow-md mt-6"
+          className="bg-gradient-to-r from-green-800 to-green-900 p-4 rounded-xl shadow-lg mt-16  relative"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-lg font-bold mb-2">Fleet Emission Overview</h2>
-          <div className="overflow-auto max-h-96">
+          <h2 className="text-3xl font-bold m-4 text-white">Fleet Emission Overview</h2>
+          <div className="overflow-auto max-h-128 custom-scrollbar">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="border p-2">Vehicle Number</th>
-                  <th className="border p-2">Fuel Type</th>
-                  <th className="border p-2">CO2 Emission (kg)</th>
-                  <th className="border p-2">Distance (km)</th>
-                  <th className="border p-2">Last Updated</th>
-                  <th className="border p-2">Download PDF</th>
+                <tr className="bg-green-700 text-xl text-white">
+                  <th className="border p-6">Vehicle Number</th>
+                  <th className="border p-6">Fuel Type</th>
+                  <th className="border p-6">CO2 Emission (kg)</th>
+                  <th className="border p-6">Distance (km)</th>
+                  <th className="border p-6">Last Updated</th>
+                  <th className="border p-6">Download PDF</th>
                 </tr>
               </thead>
               <tbody>
                 {dieselVehiclesData1.map((item, index) => (
-                  <tr key={index} className="text-center">
-                    <td className="border p-2">{item.vehicleNumber}</td>
-                    <td className="border p-2">{item.fuelType}</td>
-                    <td className="border p-2">{item.carbonFootprint} kg</td>
-                    <td className="border p-2">{item.totalDistance} km</td>
-                    <td className="border p-2">{new Date(item.updatedAt).toLocaleDateString()}</td>
-                    <td className="border p-2">
+                  <tr key={index} className="text-center text-xl text-white">
+                    <td className="border p-6">{item.vehicleNumber}</td>
+                    <td className="border p-6">{item.fuelType}</td>
+                    <td className="border p-6">{item.carbonFootprint} kg</td>
+                    <td className="border p-6">{item.totalDistance} km</td>
+                    <td className="border p-6">{new Date(item.updatedAt).toLocaleDateString()}</td>
+                    <td className="border p-6">
                       <button
                         onClick={() => handleDownload(item.pdfUrl)}
-                        className="text-black px-2 py-1  items-center"
+                        className="text-white px-2 py-1  items-center"
                       >
-                        <FileText size={16} />
+                        <FileText size={24} />
                       </button>
                     </td>
 
@@ -391,9 +407,9 @@ export const UserDashBoard = () => {
 
 
         {/* Download Report Button */}
-        <div className="text-center mt-6">
+        <div className="text-center mt-6  relative" >
           <button
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg text-2xl hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
             onClick={() => setIsModalOpen(true)}
           >
             Download Report
@@ -403,7 +419,7 @@ export const UserDashBoard = () => {
         {/* Modal Component */}
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] relative">
               <div className="flex border-b pb-2">
                 <button
                   className={`w-1/2 text-lg font-bold px-4 py-2 ${activeTab === "fuel" ? "text-green-700 border-b-2 border-green-700" : "text-gray-500"}`}
@@ -439,7 +455,7 @@ export const UserDashBoard = () => {
 
               {activeTab === "date" && (
                 <div className="mt-4">
-                  {["Daily", "last7days", "Monthly", "Yearly"].map((dateRange) => (
+                  {["Daily", "Weekly", "Monthly", "Yearly"].map((dateRange) => (
                     <label key={dateRange} className="block mt-2">
                       <input
                         type="radio"
@@ -468,7 +484,7 @@ export const UserDashBoard = () => {
               </div>
 
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
                 onClick={() => setIsModalOpen(false)}
               >
                 ✖

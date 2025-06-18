@@ -8,9 +8,8 @@ import { Home } from "./pages/Home";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { CarbonFootprint } from "./pages/CarbonFootprint";
-import { ContactUs } from "./pages/ContactUs";
+import  ContactUs  from "./pages/ContactUs";
 import { UserDashBoard } from "./pages/UserDashBoard";
-
 
 function App() {
   return (

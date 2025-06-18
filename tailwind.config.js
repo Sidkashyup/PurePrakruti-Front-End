@@ -10,6 +10,11 @@ module.exports = {
       mono: ["Roboto Mono", "monospace"],
     },
     extend: {
+            maxHeight: {
+        '128': '32rem', // 512px
+        '144': '36rem', // 576px
+        // Add more if needed
+      }
   },
   },
   plugins: [],
