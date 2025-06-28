@@ -97,7 +97,7 @@ export default function Signup() {
         alt="Background image"
       />
 
-      <div className="relative bg-green-900/60 backdrop-blur-md border border-white/60 rounded-xl shadow-xl max-w-sm sm:max-w-md md:max-w-lg w-full p-6 sm:p-8 md:p-10 m-2 sm:m-4">
+      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl max-w-sm sm:max-w-md md:max-w-lg w-full p-6 sm:p-8 md:p-10 m-2 sm:m-4">
         <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-6 text-center">Sign Up</h2>
 
         {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
@@ -162,7 +162,7 @@ export default function Signup() {
           </button>
         </form>
 
-        <p className="text-white text-center mt-4">
+        <p className="text-white text-lg text-center mt-4">
           Already have an account?{" "}
           <a href="/login" className="text-green-200 hover:underline">
             Log In

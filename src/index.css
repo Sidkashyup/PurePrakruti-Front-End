@@ -72,3 +72,13 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-thumb:hover {
   background: #22c55e;  /* brighter green on hover */
 }
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #114623 inset;  /* Tailwind's gray-800, change as needed */
+  -webkit-text-fill-color: white;  /* change text color if needed */
+  -webkit-text-size-adjust: auto;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #114623 inset;
+}

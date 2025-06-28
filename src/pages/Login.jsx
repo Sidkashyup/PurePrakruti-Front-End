@@ -87,7 +87,7 @@ export default function Login() {
         src="/bglogin3.jpg"
         alt="Background image"
       />
-      <div className="relative bg-green-900/60 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-11/12 max-w-md sm:max-w-lg p-6 sm:p-10 m-4 sm:m-12">
+      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-11/12 max-w-md sm:max-w-lg p-6 sm:p-10 m-4 sm:m-12">
         <h2 className="text-2xl sm:text-4xl font-semibold text-white mb-4 sm:mb-6 text-center">Log In</h2>
 
         {error && <p className="text-red-500 text-center text-sm sm:text-lg mb-2 sm:mb-4">{error}</p>}
@@ -128,7 +128,7 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="text-white text-center text-sm sm:text-base mt-3">
+        <p className="text-white text-center text-lg sm:text-lg mt-3">
           Don't have an account?{" "}
           <a href="/signup" className="text-green-200 hover:underline">
             Sign Up

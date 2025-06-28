@@ -14,6 +14,8 @@ export const ContactUsMobile = () => {
     message: "",
   });
 
+   const [showSuccess, setShowSuccess] = useState(false);
+
   const { firstName, lastName, email, phone, message } = formData;
 
   const handleOnChange = (e) => {
@@ -25,6 +27,7 @@ export const ContactUsMobile = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted!");
     try {
       const response = await axios.post("http://localhost:4500/api/query", {
         fullName: `${firstName} ${lastName}`,
@@ -33,17 +36,19 @@ export const ContactUsMobile = () => {
         message,
       });
 
+      setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+
       if (response.status === 200) {
-        toast.success("Query Raised successfully!", {
-          position: "bottom-right",
-          autoClose: 3000,
-        });
+        console.log("Query submitted successfully!");
+        // tostershow();
       } else {
-        toast.error("Failed to submit query.");
+        console.error("Failed to submit query.");
       }
+
+      console.log('formdata values', formData);
     } catch (error) {
-      toast.error("Error submitting query.");
-      console.error(error);
+      console.error("Error submitting query:", error);
     }
 
     setFormData({
@@ -110,6 +115,11 @@ export const ContactUsMobile = () => {
           </div>
         </div>
       </div>
+      {showSuccess && (
+      <div className="fixed top-20 right-10 bg-green-600 text-white p-6 text-xl rounded shadow-lg z-50">
+        Query raised successfully!
+      </div>
+    )}
 
       {/* Map */}
       <div className="max-w-xl mx-auto mb-8 rounded-md overflow-hidden shadow-lg h-64">
