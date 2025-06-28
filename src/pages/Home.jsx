@@ -11,13 +11,19 @@ import FAQ from "../components/home/FAQ";
 export const Home = () => {
   return (
     <div className="bg-green-50 min-h-screen w-screen">
+      <section id="hero">
       <Hero />
+      </section>
+      <section id="about">
       <About />
+      </section>
       <StatsSection /> 
       <Features />
       <Testimonials />
       <Steps />
+      <section id="faq">
       <FAQ />
+      </section>
     </div>
   );
 };

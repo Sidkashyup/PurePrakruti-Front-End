@@ -11,8 +11,11 @@ import { CarbonFootprint } from "./pages/CarbonFootprint";
 import  ContactUs  from "./pages/ContactUs";
 import { UserDashBoard } from "./pages/UserDashBoard";
 
+import OurTeam from './pages/OurTeam';
+
 function App() {
   return (
+
     <Router>
       <AuthProvider> {/* ✅ Moved inside Router */}
         <Navbar />
@@ -35,6 +38,7 @@ const MainRoutes = () => {
       <Route path="/carbonfootprint" element={<CarbonFootprint />} />
       <Route path="/UserDashBoard" element={<UserDashBoard />} />
       <Route path="/ContactUs" element={<ContactUs />} />
+      <Route path="/ourteam" element={<OurTeam />} />
     </Routes>
   );
 };

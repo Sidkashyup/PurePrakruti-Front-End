@@ -1,19 +1,28 @@
 
 import React, { useEffect, useState, useContext } from 'react';
+
 import { AuthContext } from "../AuthContext";
 import { Chart } from 'react-google-charts';
 import { color, motion } from "framer-motion";
 import { FileText } from "lucide-react";
 
+
 import natureImg from '../resource/natureImg.png';
 
 import { handleDownload } from './CarbonFootprint';
+
+
 
 export const UserDashBoard = () => {
   const authContext = useContext(AuthContext);
   const user = authContext?.user;
   const userId = user?.userId;
   const userName = user?.userName;
+  const [showKYCModal, setShowKYCModal] = useState(false);
+
+  const openKYCModal = () => setShowKYCModal(true);
+  const closeKYCModal = () => setShowKYCModal(false);
+  
 
   const [dieselVehiclesData, setDieselVehiclesData] = useState([]);
   const [dieselVehiclesData1, setDieselVehiclesData1] = useState([]);
@@ -24,6 +33,8 @@ export const UserDashBoard = () => {
   const [selectedFuel, setSelectedFuel] = useState("Quick Download");
   const [selectedDateRange, setSelectedDateRange] = useState("Weekly");
   const [routeWiseEmissionData, setRouteWiseEmissionData] = useState([]);
+
+
 
   const [timeFilter, setTimeFilter] = useState("All");
   const [filteredData, setFilteredData] = useState([]);
@@ -218,7 +229,7 @@ export const UserDashBoard = () => {
       textStyle: { fontSize: 14 },
     },
     pieSliceText: "percentage",
-    chartArea: { width: "80%", height: "75%" },
+    chartArea: { width: "90%", height: "90%" },
   };
 
 
@@ -236,6 +247,62 @@ export const UserDashBoard = () => {
       </div>
 
 
+      <div className="fixed top-5 right-32 z-50">
+  <button 
+    onClick={openKYCModal}
+    className="bg-green-600 hover:bg-green-700 text-white text-2xl px-6 py-3 rounded-full shadow-lg"
+  >
+    Verify KYC
+  </button>
+</div>
+
+
+{showKYCModal && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="bg-green-600 w-full max-w-xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
+      {/* Close Button */}
+      <button 
+        onClick={closeKYCModal}
+        className="absolute top-3 right-4 text-gray-500 hover:text-red-500 text-2xl"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-2xl font-semibold mb-4 ">KYC Verification</h2>
+
+      <form className="space-y-4">
+        <div>
+          <label className="block mb-1 font-medium">Aadhar Number</label>
+          <input type="text" placeholder="Enter Aadhar Number" className="w-full border px-3 py-2 rounded" />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">PAN Number</label>
+          <input type="text" placeholder="Enter PAN Number" className="w-full border px-3 py-2 rounded" />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Driving License Number</label>
+          <input type="text" placeholder="Enter DL Number" className="w-full border px-3 py-2 rounded" />
+        </div>
+
+        <div className="pt-4 text-right">
+          <button 
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+
+      
+
+
       <div className="min-h-full px-24 py-8 relative">
         <div>
           
@@ -247,12 +314,12 @@ export const UserDashBoard = () => {
           
 
         <motion.div
-          className="flex justify-center mt-4 px-40 relative"
+          className="flex justify-center align-middle mt-4 px-40 relative"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="text-white w-full">
+          <div className="text-white w-5/6">
             {/* Container for Cards */}
             <div className="flex flex-wrap justify-center md:justify-between gap-6">
               {/* Top Emitting Vehicle */}
@@ -261,35 +328,35 @@ export const UserDashBoard = () => {
               )} */}
 
               <motion.div
-                className="bg-gradient-to-r from-green-600/80 to-green-900 p-6 rounded-xl shadow-lg w-full sm:w-[350px] text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-green-600/80 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] min-w-[350px] w-full sm:w-1/3 md:w-1/3 lg:w-2/4 xl:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <div className="font-bold text-xl text-white">{`🚛 GreenLine Freight: ${topEmittingVehicle?.vehicleNumber ?? 'N/A'}`}</div>
-                <h1 className="text-gray-200 text-lg mt-2">Top Emitting Vehicle</h1>
+                <div className="font-bold text-2xl text-white">{`🚛 GreenLine Freight: ${topEmittingVehicle?.vehicleNumber ?? 'N/A'}`}</div>
+                <h1 className="text-gray-200 text-xl mt-2">Top Emitting Vehicle</h1>
               </motion.div>
 
               {/* Total Vehicles */}
               <motion.div
-                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg w-full sm:w-[350px] text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] min-w-[350px] w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <div className="font-bold text-xl text-white">{`🚗 Total Vehicles: ${totalVehicles}`}</div>
-                <h1 className="text-gray-200 text-lg mt-2">Total Vehicles Registered</h1>
+                <div className="font-bold text-2xl text-white">{`🚗 Total Vehicles: ${totalVehicles}`}</div>
+                <h1 className="text-gray-200 text-xl mt-2">Total Vehicles Registered</h1>
               </motion.div>
 
               {/* Total Carbon Emission */}
               <motion.div
-                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg w-full sm:w-[350px] text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] min-w-[350px] w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
-                <div className="font-bold text-xl text-white">{`🌱 Total Emission: ${totalEmission.toFixed(2)} kg`}</div>
-                <h1 className="text-gray-200 text-lg mt-2">Total Carbon Emission</h1>
+                <div className="font-bold text-2xl text-white">{`🌱 Total Emission: ${totalEmission.toFixed(2)} kg`}</div>
+                <h1 className="text-gray-200 text-xl mt-2">Total Carbon Emission</h1>
               </motion.div>
             </div>
           </div>
@@ -314,7 +381,7 @@ export const UserDashBoard = () => {
                   options={{
                     colors: ["#004d0d"], // Green color
                     legend: { position: "none" }, // Hide legend if not needed
-                    chartArea: { width: "80%" }, // Adjust chart area
+                    chartArea: { width: "90%" }, // Adjust chart area
                      backgroundColor: '#e3ffea'
                   }}
                   data={[
@@ -362,7 +429,7 @@ export const UserDashBoard = () => {
         </motion.div>
 
         <motion.div
-          className="bg-gradient-to-r from-green-800 to-green-900 p-4 rounded-xl shadow-lg mt-16  relative"
+          className="bg-gradient-to-r from-green-900 to-green-950/60 p-4 rounded-xl shadow-lg mt-16  relative"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -406,8 +473,52 @@ export const UserDashBoard = () => {
 
 
 
+      {showKYCModal && (
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="bg-green-900 backdrop-blur-md w-full max-w-3xl p-8 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh] border-white/60 border">
+      {/* Close Button */}
+      <button 
+        onClick={closeKYCModal}
+        className="absolute top-3 right-4 text-white hover:text-red-500 text-4xl"
+      >
+        &times;
+      </button>
+
+      <h2 className="text-3xl font-semibold mb-4 text-gray-100">KYC Verification</h2>
+
+      <form className="space-y-4">
+        <div>
+          <label className="block mb-1 font-medium text-lg text-gray-100">Aadhar Number</label>
+          <input type="text" placeholder="Enter Aadhar Number" className="w-full placeholder-white bg-green-700/70 text-white text-lg border border-white/70 focus:outline-none focus:ring-1 focus:ring-green-400 px-3 py-3 rounded" />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium text-lg  text-gray-100">PAN Number</label>
+          <input type="text" placeholder="Enter PAN Number" className="w-full placeholder-white bg-green-700/70 text-white text-lg border border-white/70 focus:outline-none focus:ring-1 focus:ring-green-400 px-3 py-3 rounded" />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium text-lg text-gray-100">Driving License Number</label>
+          <input type="text" placeholder="Enter DL Number" className="w-full placeholder-white bg-green-700/70 text-white text-lg border border-white/70 focus:outline-none focus:ring-1 focus:ring-green-400 px-3 py-3 rounded" />
+        </div>
+
+        <div className="pt-4 text-right">
+          <button 
+            type="submit"
+            className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 text-lg focus:ring-2 focus:ring-blue-300"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+
+
         {/* Download Report Button */}
-        <div className="text-center mt-6  relative" >
+        <div className="text-center mt-6 relative" >
           <button
             className="bg-green-600 text-white px-6 py-3 rounded-lg text-2xl hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
             onClick={() => setIsModalOpen(true)}
@@ -419,16 +530,16 @@ export const UserDashBoard = () => {
         {/* Modal Component */}
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] relative">
+            <div className="bg-gradient-to-br from-green-800 to-green-900/90 backdrop-blur-md p-8 rounded-lg shadow-xl w-[700px] relative text-white border border-white/60">
               <div className="flex border-b pb-2">
                 <button
-                  className={`w-1/2 text-lg font-bold px-4 py-2 ${activeTab === "fuel" ? "text-green-700 border-b-2 border-green-700" : "text-gray-500"}`}
+                  className={`w-1/2 text-lg font-bold px-4 py-2 ${activeTab === "fuel" ? "text-gray-100 border-b-2 border-green-600" : "text-gray-300"}`}
                   onClick={() => setActiveTab("fuel")}
                 >
                   By Fuel Type
                 </button>
                 <button
-                  className={`w-1/2 text-lg font-bold px-4 py-2 ${activeTab === "date" ? "text-green-700 border-b-2 border-green-700" : "text-gray-500"}`}
+                  className={`w-1/2 text-lg font-bold px-4 py-2 ${activeTab === "date" ? "text-gray-100 border-b-2 border-green-600" : "text-gray-300"}`}
                   onClick={() => setActiveTab("date")}
                 >
                   By Date
@@ -438,7 +549,7 @@ export const UserDashBoard = () => {
               {activeTab === "fuel" && (
                 <div className="mt-4">
                   {["DIESEL", "PETROL", "CNG", "ETHANOL"].map((fuel) => (
-                    <label key={fuel} className="block mt-2">
+                    <label key={fuel} className="block mt-2 text-gray-100 text-lg">
                       <input
                         type="radio"
                         name="fuelType"
@@ -456,7 +567,7 @@ export const UserDashBoard = () => {
               {activeTab === "date" && (
                 <div className="mt-4">
                   {["Daily", "Weekly", "Monthly", "Yearly"].map((dateRange) => (
-                    <label key={dateRange} className="block mt-2">
+                    <label key={dateRange} className="block mt-2 text-gray-100 text-lg">
                       <input
                         type="radio"
                         name="dateRange"
@@ -473,7 +584,7 @@ export const UserDashBoard = () => {
 
               <div className="text-center mt-4">
                 <button
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                  className="bg-green-600 text-white px-6 py-4 text-lg rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
                   onClick={() => {
                     downloadCSVReport();
                     setIsModalOpen(false);
@@ -484,10 +595,10 @@ export const UserDashBoard = () => {
               </div>
 
               <button
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                className="absolute top-3 right-3 text-4xl text-white hover:text-red-500"
                 onClick={() => setIsModalOpen(false)}
               >
-                ✖
+                &times;
               </button>
             </div>
           </div>

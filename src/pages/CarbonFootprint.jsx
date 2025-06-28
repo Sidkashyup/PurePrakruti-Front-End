@@ -124,6 +124,7 @@ export const CarbonFootprint = () => {
                     userId,
                 });
                 setPdfUrl(pdfUrlData.data.url);
+                console.log(pdfUrlData.data.url)
             }
         } catch (err) {
             setError(err.response?.data?.message || 'An error occurred while fetching data.');
@@ -149,11 +150,11 @@ export const CarbonFootprint = () => {
             <img className="absolute top-0 left-0 w-full h-full object-cover z-0" src="/bglogin3.jpg" alt="Background image" />
             <div className='relative'>
             <div> 
-                <h1 className="pt-40 text-5xl font-bold text-center mb-4 text-gray-200">Carbon Footprint Calculator</h1>
-                <h2 className="pt-4 text-3xl text-center mb-8 text-green-100">Calculate your vehicle's environmental impact and get certified emissions data</h2>
+                <h1 className="mt-28 2xl:mt-40 xl:mt-36 lg:mt-32 sm:mt-25 text-5xl font-bold text-center mb-4 text-gray-200">Carbon Footprint Calculator</h1>
+                <h2 className="pt-4 text-3xl text-center lg:mb-6 text-green-100">Calculate your vehicle's environmental impact and get certified emissions data</h2>
             </div>
-            <div className="flex justify-center items-center bg-opacity-40">
-                <div className="bg-green-900/60 backdrop-blur-md border border-white/80 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 rounded-lg shadow-xlmax-w-3xl w-full lg:max-w-4xl xl:max-w-5xl m-4 flex flex-col justify-center">
+            <div className="flex justify-center items-center mb-20 bg-opacity-40">
+                <div className="bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/80 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 rounded-lg shadow-xlmax-w-3xl w-full lg:max-w-4xl xl:max-w-5xl m-4 flex flex-col justify-center">
                     <form onSubmit={handleSubmit} className="space-y-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 text-gray-100">
                             {['Vehicle_Number', 'SourcePincode', 'DestinationPincode', 'MobilizationDistance', 'DemobilizationDistance', 'LoadedWeight'].map((field) => (
@@ -167,7 +168,7 @@ export const CarbonFootprint = () => {
                                         name={field}
                                         value={formData[field] || ""}
                                         onChange={handleChange}
-                                        className="w-full px-6 py-3 border text-xl border-white/60 rounded p-2 text-white placeholder-white/80 bg-green-700/50 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-green-400"
+                                        className="w-full px-6 py-3 border text-xl border-white/60 rounded p-2 text-white placeholder-white/80 bg-green-700/50 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-green-400"
                                         required={!['MobilizationDistance', 'DemobilizationDistance'].includes(field)}
                                     />
                                 </div>
