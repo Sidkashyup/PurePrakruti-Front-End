@@ -37,7 +37,7 @@ export const CarbonFootprint = () => {
     const userId = user?.userId;
 
     const [formData, setFormData] = useState({
-        Vehicle_Number: '',
+        VechileNumber: '',
         SourcePincode: '',
         DestinationPincode: '',
         MobilizationDistance: '',
@@ -134,7 +134,7 @@ export const CarbonFootprint = () => {
     const closeModal = () => {
         setResponse(null);
         setFormData({
-            Vehicle_Number: '',
+            VechileNumber: '',
             SourcePincode: '',
             DestinationPincode: '',
             MobilizationDistance: '',
@@ -157,7 +157,7 @@ export const CarbonFootprint = () => {
                 <div className="bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/80 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 rounded-lg shadow-xlmax-w-3xl w-full lg:max-w-4xl xl:max-w-5xl m-4 flex flex-col justify-center">
                     <form onSubmit={handleSubmit} className="space-y-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 text-gray-100">
-                            {['Vehicle_Number', 'SourcePincode', 'DestinationPincode', 'MobilizationDistance', 'DemobilizationDistance', 'LoadedWeight'].map((field) => (
+                            {['VechileNumber', 'SourcePincode', 'DestinationPincode', 'MobilizationDistance', 'DemobilizationDistance', 'LoadedWeight'].map((field) => (
                                 <div key={field}>
                                     <label className="block text-xl font-medium mb-2" htmlFor={field}>
                                         {field.replace(/([A-Z])/g, ' $1').trim()}{['MobilizationDistance', 'DemobilizationDistance'].includes(field) ? '' : '*'}
@@ -208,7 +208,7 @@ export const CarbonFootprint = () => {
 
                                     <div className="pl-5 space-y-2 text-green-800">
                                         <p><strong>Total CO2 Emission:</strong> {response.co2Emission} kg</p>
-                                        <p><strong>Vehicle_Number:</strong> {response.vehicleNumber}</p>
+                                        <p><strong>VechileNumber:</strong> {response.vehicleNumber}</p>
                                         <p><strong>Certificate Issue Date:</strong> {response.certificateIssueDate}</p>
                                         <p><strong>Certificate Number:</strong> {response.certificateNumber}</p>
                                     </div>

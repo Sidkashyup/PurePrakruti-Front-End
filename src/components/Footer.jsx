@@ -26,7 +26,7 @@ export const Footer = () => {
               alt="Pure Prakruti Logo"
             />
           </Link>
-          <p className="text-lg text-white font-semibold"> Pure Prakruti </p>
+          <p className="text-xl text-white font-semibold"> Pure Prakruti </p>
         </div>
 
         {/* Company Links */}

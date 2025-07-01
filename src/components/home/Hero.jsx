@@ -16,6 +16,19 @@ window.scrollTo({
 
     }
   };
+const scrollToFeatures = () => {
+  const featuresSection = document.getElementById("features");
+  if (featuresSection) {
+    const navbarHeight = 70; // Adjust this to your actual navbar height
+    const elementPosition = featuresSection.getBoundingClientRect().top;
+    const offsetPosition = window.pageYOffset + elementPosition - navbarHeight;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  }
+};
 
   return (
     <header className="relative w-full h-screen overflow-hidden">
@@ -34,7 +47,7 @@ window.scrollTo({
         <motion.h1
   initial={{ opacity: 0, scale: 1.04 }}
   animate={{ opacity: 1, scale: 1 }}
-  transition={{ duration: 1.5, ease: "easeOut" }}
+  transition={{ duration: 0.5, ease: "easeOut" }}
   className="text-5xl md:text-7xl font-extrabold max-w-5xl leading-tight drop-shadow-lg text-white"
   style={{ display: "inline-block" }}
 >
@@ -48,7 +61,7 @@ window.scrollTo({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.6, ease: "easeOut" }}
+          transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
           className="mt-6 text-white text-xl md:text-3xl max-w-3xl drop-shadow-md"
         >
           Join the revolution in road logistics by reducing carbon emissions and
@@ -58,15 +71,19 @@ window.scrollTo({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.6, ease: "easeOut" }}
+          transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
           className="mt-10 flex flex-wrap justify-center gap-6"
         >
+          <div onClick={scrollToFeatures}>
           <button className="bg-green-700 hover:bg-green-600 text-white text-lg font-semibold py-4 px-10 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             Explore Our Solutions
           </button>
+          </div>
+          <div onClick={scrollToAbout}>
           <button className="border-2 border-white hover:bg-white hover:text-green-700 text-white text-lg font-semibold py-4 px-10 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             Learn More
           </button>
+          </div>
         </motion.div>
       </div>
 

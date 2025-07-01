@@ -58,6 +58,32 @@ export const UserDashBoard = () => {
     return chartData;
   }, [routeWiseEmissionData]);
 
+  const getDateRange = (range) => {
+  const today = new Date();
+  const endDate = today.toISOString().split("T")[0];
+
+  let startDate;
+
+  switch (range) {
+    case "Daily":
+      startDate = endDate;
+      break;
+    case "Weekly":
+      startDate = new Date(today.setDate(today.getDate() - 7)).toISOString().split("T")[0];
+      break;
+    case "Monthly":
+      startDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split("T")[0];
+      break;
+    case "Yearly":
+      startDate = new Date(today.setFullYear(today.getFullYear() - 1)).toISOString().split("T")[0];
+      break;
+    default:
+      startDate = endDate;
+  }
+
+  return { startDate, endDate };
+};
+
 
 
   useEffect(() => {
@@ -139,52 +165,115 @@ export const UserDashBoard = () => {
   if (loading) return;
 
 
+  // const downloadCSVReport = async () => {
+  //   try {
+  //     // Construct the URL for the API call with selected filters
+  //     const response = await fetch(
+  //       `http://localhost:4500/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
+  //     );
+      
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch report data");
+  //     }
+
+  //     const data = await response.json();
+
+  //     // Check if data contains carbonFootprintData
+  //     if (!data.carbonFootprintData) {
+  //       throw new Error("No carbon footprint data available");
+  //     }
+
+  //     // Create CSV content
+  //     const csvContent = [
+  //       ["Date", "VechileNumber", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated"],
+  //       ...data.carbonFootprintData.map((item) => [
+  //         item.date,
+  //         item.vehicleNumber,
+  //         item.fuelType,
+  //         item.carbonFootprint,
+  //         new Date(item.updatedAt).toLocaleDateString(),
+  //       ]),
+  //     ]
+  //       .map((row) => row.join(","))
+  //       .join("\n");
+
+  //     // Create a Blob and trigger the download
+  //     const blob = new Blob([csvContent], { type: "text/csv" });
+  //     const url = window.URL.createObjectURL(blob);
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", `Carbon_Footprint_Report_${selectedFuel}.csv`);
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+
+  //   } catch (error) {
+  //     console.error("Error downloading report:", error);
+  //   }
+  // };
+
   const downloadCSVReport = async () => {
-    try {
-      // Construct the URL for the API call with selected filters
-      const response = await fetch(
-        `http://localhost:4500/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch report data");
-      }
-
-      const data = await response.json();
-
-      // Check if data contains carbonFootprintData
-      if (!data.carbonFootprintData) {
-        throw new Error("No carbon footprint data available");
-      }
-
-      // Create CSV content
-      const csvContent = [
-        ["Date", "Vehicle_Number", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated"],
-        ...data.carbonFootprintData.map((item) => [
-          item.date,
-          item.vehicleNumber,
-          item.fuelType,
-          item.carbonFootprint,
-          new Date(item.updatedAt).toLocaleDateString(),
-        ]),
-      ]
-        .map((row) => row.join(","))
-        .join("\n");
-
-      // Create a Blob and trigger the download
-      const blob = new Blob([csvContent], { type: "text/csv" });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `Carbon_Footprint_Report_${selectedFuel}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-    } catch (error) {
-      console.error("Error downloading report:", error);
+  try {
+    if (!selectedFuel && !selectedDateRange) {
+      alert("Please select fuel type or date range");
+      return;
     }
-  };
+
+    let url = `http://localhost:4500/api/vehicle/carbonfootprintbyfueltype?`;
+
+    if (selectedFuel) url += `fuelType=${selectedFuel}&`;
+
+    if (selectedDateRange) {
+      const { startDate, endDate } = getDateRange(selectedDateRange);
+      url += `startDate=${startDate}&endDate=${endDate}`;
+    }
+
+    console.log("Requesting report from:", url);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Backend error response:", errorText);
+      throw new Error("Failed to fetch report data");
+    }
+
+    const data = await response.json();
+
+    if (!data.carbonFootprintData || !data.carbonFootprintData.length) {
+      throw new Error("No carbon footprint data available");
+    }
+
+    // Generate CSV and download...
+    const csvContent = [
+      ["Date", "VechileNumber", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated", "Download PDF Link"],
+      ...data.carbonFootprintData.map((item) => [
+        item.date,
+        item.vehicleNumber,
+        item.fuelType,
+        item.carbonFootprint,
+        new Date(item.updatedAt).toLocaleDateString(),
+        item.pdfUrl ? `=("${item.pdfUrl}")` : "No PDF Available"
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.setAttribute("download", `Carbon_Footprint_Report_${selectedFuel || selectedDateRange}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  } catch (error) {
+    console.error("Error downloading report:", error);
+  }
+};
+
 
 
   const topEmittingVehicle =
@@ -581,6 +670,7 @@ export const UserDashBoard = () => {
                   ))}
                 </div>
               )}
+              
 
               <div className="text-center mt-4">
                 <button
@@ -601,6 +691,7 @@ export const UserDashBoard = () => {
                 &times;
               </button>
             </div>
+            
           </div>
         )}
       </div>
