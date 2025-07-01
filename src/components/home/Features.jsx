@@ -35,7 +35,7 @@ const featureList = [
 
 const Features = () => {
   return (
-    <section className="relative py-20 bg-white overflow-hidden">
+    <section className="relative py-20 bg-white overflow-hidden" id="features">
       <img
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
         src="/featuresbg4.avif"
@@ -58,9 +58,9 @@ const Features = () => {
           {featureList.map((feature, index) => (
             <div
               key={index}
-              className="bg-white p-8 xl:p-10 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition duration-300 flex flex-col items-center text-center"
+              className="bg-white p-8 xl:p-10 rounded-2xl shadow-lg hover:shadow-2xl hover:scale-105 transition border-green-500 border duration-300 flex flex-col items-center text-center"
             >
-              <div className="w-56 h-56 mb-6 rounded-full overflow-hidden border-4 border-green-600 shadow">
+              <div className="w-48 h-48 mb-6 rounded-full overflow-hidden border-4 border-green-600 shadow">
                 <img
                   src={feature.image}
                   alt={feature.title}

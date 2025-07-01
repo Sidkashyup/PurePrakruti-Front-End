@@ -81,13 +81,14 @@ export default function Login() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center relative">
+    <div className="relative min-h-screen w-screen overflow-auto">
       <img
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0 bg-cover "
         src="/bglogin3.jpg"
         alt="Background image"
       />
-      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-11/12 max-w-md sm:max-w-lg p-6 sm:p-10 m-4 sm:m-12">
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
+      <div className=" bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 sm:p-12 sm:mt-32 m-4 md:m-24 ">
         <h2 className="text-2xl sm:text-4xl font-semibold text-white mb-4 sm:mb-6 text-center">Log In</h2>
 
         {error && <p className="text-red-500 text-center text-sm sm:text-lg mb-2 sm:mb-4">{error}</p>}
@@ -193,6 +194,7 @@ export default function Login() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

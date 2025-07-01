@@ -76,7 +76,7 @@ export const ContactUsDesktop = () => {
   // };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-auto relative">
       <img className="absolute top-0 left-0 w-full h-full object-cover z-0" src="/bglogin3.jpg" alt="Background image ;"  />
       <ToastContainer />
 

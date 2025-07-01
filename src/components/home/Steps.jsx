@@ -65,9 +65,9 @@ const Steps = () => {
       {/* Left Arrow */}
       <button
         onClick={goPrev}
-        className="absolute left-4 md:left-10 z-10 text-green-700 hover:text-green-900 transition"
+        className="relative self-center z-10 text-green-700 hover:text-green-900 transition"
       >
-        <FaChevronLeft className="text-5xl" />
+        <FaChevronLeft className="text-6xl" />
       </button>
 
       {/* Animated Card */}
@@ -110,9 +110,9 @@ const Steps = () => {
       {/* Right Arrow */}
       <button
         onClick={goNext}
-        className="absolute right-4 md:right-10 z-10 text-green-700 hover:text-green-900 transition"
+        className="absolute right-8 md:right-16 z-10 text-green-700 hover:text-green-900 transition"
       >
-        <FaChevronRight className="text-5xl" />
+        <FaChevronRight className="text-6xl" />
       </button>
     </section>
   );

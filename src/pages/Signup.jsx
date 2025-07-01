@@ -90,14 +90,14 @@ export default function Signup() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center relative pt-[70px]">
+    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center overflow-auto relative pt-[70px]">
       <img
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0"
         src="/bglogin3.jpg"
         alt="Background image"
       />
 
-      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl max-w-sm sm:max-w-md md:max-w-lg w-full p-6 sm:p-8 md:p-10 m-2 sm:m-4">
+      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-full max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl p-6 sm:p-8 md:p-10 m-12 sm:mt-16">
         <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-6 text-center">Sign Up</h2>
 
         {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
