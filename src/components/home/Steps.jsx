@@ -65,7 +65,7 @@ const Steps = () => {
       {/* Left Arrow */}
       <button
         onClick={goPrev}
-        className="relative self-center z-10 text-green-700 hover:text-green-900 transition"
+        className="absolute left-8 md:left-24 z-10 text-green-700 hover:text-green-900 transition"
       >
         <FaChevronLeft className="text-6xl" />
       </button>
@@ -81,7 +81,7 @@ const Steps = () => {
           className="flex items-center justify-center"
         >
           {/* Outer green border container */}
-          <div className="p-2 border-[0px] border-green-700 rounded-2xl bg-white shadow-xl">
+          <div className="p-2 border-[2px] border-green-700 rounded-2xl bg-white shadow-xl">
             {/* Inner white card */}
             <div className="flex w-full max-w-6xl rounded-lg overflow-hidden">
               {/* Left - Image */}
@@ -110,7 +110,7 @@ const Steps = () => {
       {/* Right Arrow */}
       <button
         onClick={goNext}
-        className="absolute right-8 md:right-16 z-10 text-green-700 hover:text-green-900 transition"
+        className="absolute right-8 md:right-24 z-10 text-green-700 hover:text-green-900 transition"
       >
         <FaChevronRight className="text-6xl" />
       </button>

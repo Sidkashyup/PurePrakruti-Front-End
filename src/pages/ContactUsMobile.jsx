@@ -88,7 +88,7 @@ export const ContactUsMobile = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <LocIcon className="w-10 h-10 text-white" />
+            <LocIcon className="w-11 h-11 text-white" />
             <div className="text-left">
               <h4 className="text-xl font-semibold">Visit Our Office</h4>
               <p className="text-green-300">Visit our location in real life.</p>

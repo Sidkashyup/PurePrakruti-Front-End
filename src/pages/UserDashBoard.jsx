@@ -6,16 +6,20 @@ import { Chart } from 'react-google-charts';
 import { color, motion } from "framer-motion";
 import { FileText } from "lucide-react";
 
+import KYCSection from "../components/KYCSection";
+
 
 import natureImg from '../resource/natureImg.png';
 
 import { handleDownload } from './CarbonFootprint';
+import axios from "axios";
 
 
 
 export const UserDashBoard = () => {
   const authContext = useContext(AuthContext);
-  const user = authContext?.user;
+  // const user = authContext?.user;
+  const { user, setUser } = useContext(AuthContext);
   const userId = user?.userId;
   const userName = user?.userName;
   const [showKYCModal, setShowKYCModal] = useState(false);
@@ -57,6 +61,24 @@ export const UserDashBoard = () => {
 
     return chartData;
   }, [routeWiseEmissionData]);
+
+
+//   const refreshUser = async () => {
+//   try {
+//     const response = await axios.get(`http://localhost:4500/api/auth/user/${user._id}`);
+//     setUser(response.data); // ⬅️ updates AuthContext
+//   } catch (error) {
+//     console.error("❌ Failed to refresh user:", error);
+//   }
+// };
+
+// useEffect(() => {
+//   if (user?.userId || user?._id) {
+//     refreshUser(); // ⬅️ THIS fetches full user data including KYC status
+//   }
+// }, []);
+
+
 
   const getDateRange = (range) => {
   const today = new Date();
@@ -322,6 +344,72 @@ export const UserDashBoard = () => {
   };
 
 
+    const handleAadharSubmit = async (formData) => {
+  try {
+    const response = await axios.post("http://localhost:4500/api/kyc/verify/aadhar", {
+      ...formData,
+      userId: user._id, // make sure 'user' is defined
+    });
+
+
+    console.log("✅ Aadhar Verified:", response.data);
+    alert("Aadhar Verified Successfully!");
+        // await refreshUser();
+  } catch (error) {
+    console.error("❌ Aadhar Verification Failed:", error.response?.data || error.message);
+    alert("Aadhar verification failed.");
+  }
+};
+
+    const handlePanSubmit = async (data) => {
+  const requestBody = {
+    panno: data.panno,
+    PANFullName: data.PANFullName,
+    userId: user?.userId || user?._id,        // ✅ FIXED THIS LINE
+    code: "mock",
+    code_verifier: "mock",
+  };
+  
+
+  console.log("📤 Sending PAN request body:", requestBody);
+  console.log("🟡 User ID (should be defined):", user?.userId);
+
+  if (!requestBody.userId) {
+    alert("❌ userId is missing! Cannot proceed.");
+    return;
+  }
+
+  try {
+    const response = await axios.post("http://localhost:4500/api/kyc/verify/pan", requestBody);
+    console.log("✅ PAN Verified:", response.data);
+    alert("PAN Verified Successfully!");
+    // await refreshUser();
+  } catch (err) {
+    console.error("❌ PAN Verification Failed:", err?.response?.data?.message || err.message);
+    alert("PAN verification failed.");
+  }
+};
+    const handleDlSubmit = async (data) => {
+      
+  const requestBody = {
+    dlnumber: data.dlnumber,
+    dob: data.dob,
+    userId: user?.userId,
+  };
+
+  console.log("🧾 User ID (should be defined):",user?.userId);
+  console.log("📤 Sending DL request:", requestBody);
+
+  try {
+    const response = await axios.post("http://localhost:4500/api/kyc/verify/drivingLicence", requestBody);
+    console.log("✅ DL Verified:", response.data);
+    alert("Driving License Verified Successfully!");
+    // await refreshUser();
+  } catch (error) {
+    console.error("❌ DL Verification Failed:", error?.response?.data?.message || error.message);
+    alert("DL verification failed.");
+  }
+};
 
 
   return (
@@ -345,45 +433,50 @@ export const UserDashBoard = () => {
   </button>
 </div>
 
-
 {showKYCModal && (
   <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-green-600 w-full max-w-xl p-6 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh]">
+    <div className="bg-green-900 backdrop-blur-md w-full max-w-3xl p-8 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh] border-white/60 border">
       {/* Close Button */}
       <button 
         onClick={closeKYCModal}
-        className="absolute top-3 right-4 text-gray-500 hover:text-red-500 text-2xl"
+        className="absolute top-3 right-4 text-white hover:text-red-500 text-4xl"
       >
         &times;
       </button>
 
-      <h2 className="text-2xl font-semibold mb-4 ">KYC Verification</h2>
+      <h2 className="text-3xl font-semibold mb-4 text-gray-100">KYC Verification</h2>
 
-      <form className="space-y-4">
-        <div>
-          <label className="block mb-1 font-medium">Aadhar Number</label>
-          <input type="text" placeholder="Enter Aadhar Number" className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium">PAN Number</label>
-          <input type="text" placeholder="Enter PAN Number" className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium">Driving License Number</label>
-          <input type="text" placeholder="Enter DL Number" className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div className="pt-4 text-right">
-          <button 
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+      <KYCSection
+  title="Aadhar Verification"
+  verified={user.kyc?.aadhar?.verified}
+  fields={[
+    { label: "Aadhar Number", key: "uid" },
+    { label: "Name", key: "name" },
+    { label: "DOB (YYYYMMDD)", key: "dob" },
+    { label: "Gender (M/F)", key: "gender" },
+    { label: "Mobile", key: "mobile" }
+  ]}
+  onSubmit={handleAadharSubmit}
+/>
+<KYCSection
+  title="PAN Verification"
+  verified={user?.kyc?.pan?.verified}
+  fields={[
+    { key: "panno", label: "PAN Number" },
+    { key: "PANFullName", label: "Full Name (as per PAN)" },
+  ]}
+  user={user} 
+  onSubmit={handlePanSubmit}
+/>
+<KYCSection
+  title="Driving License Verification"
+  verified={user?.kyc?.drivingLicence?.verified}
+  fields={[
+    { key: "dlnumber", label: "DL Number" },
+    { key: "dob", label: "DOB (YYYYMMDD)" }
+  ]}
+  onSubmit={handleDlSubmit}
+/>
     </div>
   </div>
 )}
@@ -562,47 +655,7 @@ export const UserDashBoard = () => {
 
 
 
-      {showKYCModal && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-green-900 backdrop-blur-md w-full max-w-3xl p-8 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh] border-white/60 border">
-      {/* Close Button */}
-      <button 
-        onClick={closeKYCModal}
-        className="absolute top-3 right-4 text-white hover:text-red-500 text-4xl"
-      >
-        &times;
-      </button>
-
-      <h2 className="text-3xl font-semibold mb-4 text-gray-100">KYC Verification</h2>
-
-      <form className="space-y-4">
-        <div>
-          <label className="block mb-1 font-medium text-lg text-gray-100">Aadhar Number</label>
-          <input type="text" placeholder="Enter Aadhar Number" className="w-full placeholder-white bg-green-700/70 text-white text-lg border border-white/70 focus:outline-none focus:ring-1 focus:ring-green-400 px-3 py-3 rounded" />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium text-lg  text-gray-100">PAN Number</label>
-          <input type="text" placeholder="Enter PAN Number" className="w-full placeholder-white bg-green-700/70 text-white text-lg border border-white/70 focus:outline-none focus:ring-1 focus:ring-green-400 px-3 py-3 rounded" />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium text-lg text-gray-100">Driving License Number</label>
-          <input type="text" placeholder="Enter DL Number" className="w-full placeholder-white bg-green-700/70 text-white text-lg border border-white/70 focus:outline-none focus:ring-1 focus:ring-green-400 px-3 py-3 rounded" />
-        </div>
-
-        <div className="pt-4 text-right">
-          <button 
-            type="submit"
-            className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 text-lg focus:ring-2 focus:ring-blue-300"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
+      
 
 
 

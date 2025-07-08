@@ -12,6 +12,7 @@ import  ContactUs  from "./pages/ContactUs";
 import { UserDashBoard } from "./pages/UserDashBoard";
 
 import OurTeam from './pages/OurTeam';
+import Facts from './pages/Facts';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ const MainRoutes = () => {
       <Route path="/UserDashBoard" element={<UserDashBoard />} />
       <Route path="/ContactUs" element={<ContactUs />} />
       <Route path="/ourteam" element={<OurTeam />} />
+      <Route path="/Facts" element={<Facts />} />
     </Routes>
   );
 };

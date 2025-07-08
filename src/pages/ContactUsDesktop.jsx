@@ -95,7 +95,7 @@ export const ContactUsDesktop = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
               <div className="flex items-start gap-4">
-                <MailIcon className="w-14 h-14 text-white" />
+                <MailIcon className="w-14 h-14 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-white " />
                 <div>
                   <h4 className="font-bold text-xl text-gray-100">Email Support</h4>
                   <p className="text-gray-200 text-lg">Our team can respond in real time.</p>
@@ -108,7 +108,7 @@ export const ContactUsDesktop = () => {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <LocIcon className="w-14 h-14 scale-[2] mr-1 text-white" />
+                <LocIcon className="w-14 h-14 scale-[2.3] mr-1 text-white" />
                 <div>
                   <h4 className="font-bold text-gray-100 text-xl">Visit Our Office</h4>
                   <p className="text-gray-200 text-lg">Visit our location in real life.</p>
