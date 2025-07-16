@@ -65,7 +65,7 @@ export const UserDashBoard = () => {
 
 //   const refreshUser = async () => {
 //   try {
-//     const response = await axios.get(`http://localhost:4500/api/auth/user/${user._id}`);
+//     const response = await axios.get(`https://pureprakruti.com/api/auth/user/${user._id}`);
 //     setUser(response.data); // ⬅️ updates AuthContext
 //   } catch (error) {
 //     console.error("❌ Failed to refresh user:", error);
@@ -117,9 +117,9 @@ export const UserDashBoard = () => {
     const fetchCarbonFootprintData = async () => {
       try {
         const [response1, response2, routeResponse] = await Promise.all([
-          fetch(`http://localhost:4500/api/vehicle/carbonfootprint/dieselvehicles/${userId}`),
-          fetch(`http://localhost:4500/api/vehicle/carbonfootprint/dieselvehicles1/${userId}`),
-          fetch(`http://localhost:4500/api/vehicle/routewiseEmission/${userId}`)
+          fetch(`https://pureprakruti.com/api/vehicle/carbonfootprint/dieselvehicles/${userId}`),
+          fetch(`https://pureprakruti.com/api/vehicle/carbonfootprint/dieselvehicles1/${userId}`),
+          fetch(`https://pureprakruti.com/api/vehicle/routewiseEmission/${userId}`)
         ]);
 
         if (!response1.ok) throw new Error(`Failed to fetch dieselvehicles data ${error}`);
@@ -191,7 +191,7 @@ export const UserDashBoard = () => {
   //   try {
   //     // Construct the URL for the API call with selected filters
   //     const response = await fetch(
-  //       `http://localhost:4500/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
+  //       `https://pureprakruti.com/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
   //     );
       
 
@@ -242,7 +242,7 @@ export const UserDashBoard = () => {
       return;
     }
 
-    let url = `http://localhost:4500/api/vehicle/carbonfootprintbyfueltype?`;
+    let url = `https://pureprakruti.com/api/vehicle/carbonfootprintbyfueltype?`;
 
     if (selectedFuel) url += `fuelType=${selectedFuel}&`;
 
@@ -346,7 +346,7 @@ export const UserDashBoard = () => {
 
     const handleAadharSubmit = async (formData) => {
   try {
-    const response = await axios.post("http://localhost:4500/api/kyc/verify/aadhar", {
+    const response = await axios.post("https://pureprakruti.com/api/kyc/verify/aadhar", {
       ...formData,
       userId: user._id, // make sure 'user' is defined
     });
@@ -380,7 +380,7 @@ export const UserDashBoard = () => {
   }
 
   try {
-    const response = await axios.post("http://localhost:4500/api/kyc/verify/pan", requestBody);
+    const response = await axios.post("https://pureprakruti.com/api/kyc/verify/pan", requestBody);
     console.log("✅ PAN Verified:", response.data);
     alert("PAN Verified Successfully!");
     // await refreshUser();
@@ -401,7 +401,7 @@ export const UserDashBoard = () => {
   console.log("📤 Sending DL request:", requestBody);
 
   try {
-    const response = await axios.post("http://localhost:4500/api/kyc/verify/drivingLicence", requestBody);
+    const response = await axios.post("https://pureprakruti.com/api/kyc/verify/drivingLicence", requestBody);
     console.log("✅ DL Verified:", response.data);
     alert("Driving License Verified Successfully!");
     // await refreshUser();

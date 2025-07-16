@@ -29,7 +29,7 @@ export const ContactUsMobile = () => {
     e.preventDefault();
     console.log("Form submitted!");
     try {
-      const response = await axios.post("http://localhost:4500/api/query", {
+      const response = await axios.post("https://pureprakruti.com/api/query", {
         fullName: `${firstName} ${lastName}`,
         email,
         phone,

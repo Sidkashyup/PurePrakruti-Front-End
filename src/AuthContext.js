@@ -92,8 +92,8 @@ export const AuthProvider = ({ children }) => {
   // Signup function
   const signup = async (userData) => {
     try {
-      const res = await axios.post("http://localhost:4500/api/auth/signup", userData);
-console.log('#$$$$$%^&%$#',res.data);
+      const res = await axios.post("https://pureprakruti.com/api/auth/signup", userData);
+      console.log('#$$$$$%^&%$#', res.data);
       // alert(res.data.message);
       navigate("/login");
     } catch (error) {
@@ -105,7 +105,7 @@ console.log('#$$$$$%^&%$#',res.data);
   // Login function
   const login = async (credentials) => {
     try {
-      const res = await axios.post("http://localhost:4500/api/auth/login", credentials);
+      const res = await axios.post("https://pureprakruti.com/api/auth/login", credentials);
       // console.log("Login response data:", res.data.data.token);
       const { token } = res.data.data;
 
@@ -144,7 +144,7 @@ console.log('#$$$$$%^&%$#',res.data);
 
   // Google Login function
   const googleLogin = () => {
-    window.location.href = "http://localhost:4500/auth/google";
+    window.location.href = "https://pureprakruti.com/auth/google";
   };
 
   return (

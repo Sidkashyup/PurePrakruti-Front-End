@@ -49,7 +49,7 @@ export default function Login() {
 
     setOtpLoading(true);
     try {
-      await axios.post("http://localhost:4500/api/otp/send", { mobileNumber: otpMobile });
+      await axios.post("https://pureprakruti.com/api/otp/send", { mobileNumber: otpMobile });
       setOtpSent(true);
     } catch (e) {
       setOtpError(e.response?.data?.message || "Failed to send OTP");
@@ -66,7 +66,7 @@ export default function Login() {
     }
     setOtpLoading(true);
     try {
-      const res = await axios.post("http://localhost:4500/api/otp/verify", { mobileNumber: otpMobile, otp });
+      const res = await axios.post("https://pureprakruti.com/api/otp/verify", { mobileNumber: otpMobile, otp });
       if (res.data.success) {
         await login({ mobileNumber: otpMobile, otpLogin: true });
         navigate("/UserDashBoard");
