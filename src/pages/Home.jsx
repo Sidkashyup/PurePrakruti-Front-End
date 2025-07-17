@@ -1,28 +1,66 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import Hero from "../components/home/Hero";
 import About from "../components/home/About";
-import StatsSection from '../components/home/StatsSection';
+import StatsSection from "../components/home/StatsSection";
 import Features from "../components/home/Features";
-import Testimonials from "../components/home/Testimonials";
-import Steps from "../components/home/Steps";
-import FAQ from "../components/home/FAQ";
+import { useInView } from "../hooks/useInView";
+import FadeInSection from "../components/common/FadeInSection";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
+const Testimonials = lazy(() => import("../components/home/Testimonials"));
+const Steps = lazy(() => import("../components/home/Steps"));
+const FAQ = lazy(() => import("../components/home/FAQ"));
 
 export const Home = () => {
+  const [testimonialRef, isTestimonialInView] = useInView();
+  const [stepsRef, isStepsInView] = useInView();
+  const [faqRef, isFaqInView] = useInView();
+
   return (
     <div className="bg-green-50 min-h-screen w-screen">
       <section id="hero">
-      <Hero />
+        <Hero />
       </section>
       <section id="about">
-      <About />
+        <About />
       </section>
-      <StatsSection /> 
+      <StatsSection />
       <Features />
-      <Testimonials />
-      <Steps />
-      <section id="faq">
-      <FAQ />
+
+      <div ref={testimonialRef}>
+        {isTestimonialInView ? (
+          <Suspense fallback={<LoadingSpinner />}>
+            <FadeInSection>
+              <Testimonials />
+            </FadeInSection>
+          </Suspense>
+        ) : (
+          <LoadingSpinner />
+        )}
+      </div>
+
+      <div ref={stepsRef}>
+        {isStepsInView ? (
+          <Suspense fallback={<LoadingSpinner height="h-96" />}>
+            <FadeInSection>
+              <Steps />
+            </FadeInSection>
+          </Suspense>
+        ) : (
+          <LoadingSpinner height="h-96" />
+        )}
+      </div>
+
+      <section id="faq" ref={faqRef}>
+        {isFaqInView ? (
+          <Suspense fallback={<LoadingSpinner height="h-72" />}>
+            <FadeInSection>
+              <FAQ />
+            </FadeInSection>
+          </Suspense>
+        ) : (
+          <LoadingSpinner height="h-72" />
+        )}
       </section>
     </div>
   );
