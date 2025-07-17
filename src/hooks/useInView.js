@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react"
 export const useInView = (options = {}) => {
   // interface IntersectionObserverInit {
 //   root?: Element | null;
-//   rootMargin?: string;
-//   threshold?: number | number[];
+//   rootMargin?: 0px 0px -100px 0px;
+//   threshold?: 0.2;
 // }
 
   const ref = useRef(null);

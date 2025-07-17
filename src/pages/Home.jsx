@@ -28,38 +28,32 @@ export const Home = () => {
       <Features />
 
       <div ref={testimonialRef}>
-        {isTestimonialInView ? (
+        {isTestimonialInView && (
           <Suspense fallback={<LoadingSpinner />}>
             <FadeInSection>
               <Testimonials />
             </FadeInSection>
           </Suspense>
-        ) : (
-          <LoadingSpinner />
         )}
       </div>
 
       <div ref={stepsRef}>
-        {isStepsInView ? (
-          <Suspense fallback={<LoadingSpinner height="h-96" />}>
+        {isStepsInView && (
+          <Suspense fallback={<LoadingSpinner />}>
             <FadeInSection>
               <Steps />
             </FadeInSection>
           </Suspense>
-        ) : (
-          <LoadingSpinner height="h-96" />
         )}
       </div>
 
       <section id="faq" ref={faqRef}>
-        {isFaqInView ? (
-          <Suspense fallback={<LoadingSpinner height="h-72" />}>
+        {isFaqInView && (
+          <Suspense fallback={<LoadingSpinner />}>
             <FadeInSection>
               <FAQ />
             </FadeInSection>
           </Suspense>
-        ) : (
-          <LoadingSpinner height="h-72" />
         )}
       </section>
     </div>
