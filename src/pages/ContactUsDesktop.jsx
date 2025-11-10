@@ -142,8 +142,8 @@ export const ContactUsDesktop = () => {
             <form onSubmit={handleOnSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2 flex flex-col gap-8">
-                  <div>
-                    <label className="block text-gray-100 text-xl">First Name*</label>
+                  <div className="">
+                    <label className="block text-gray-100 text-xl mb-2">First Name*</label>
                     <input
                       type="text"
                       name="firstName"
@@ -155,7 +155,7 @@ export const ContactUsDesktop = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-100 text-xl">Last Name</label>
+                    <label className="block text-gray-100 text-xl mb-2">Last Name</label>
                     <input
                       type="text"
                       name="lastName"
@@ -166,7 +166,7 @@ export const ContactUsDesktop = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-100 text-xl">Email*</label>
+                    <label className="block text-gray-100 text-xl mb-2">Email*</label>
                     <input
                       type="email"
                       name="email"
@@ -178,7 +178,7 @@ export const ContactUsDesktop = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-100 text-xl">Phone Number</label>
+                    <label className="block text-gray-100 text-xl mb-2">Phone Number</label>
                     <input
                       type="text"
                       name="phone"
@@ -189,7 +189,7 @@ export const ContactUsDesktop = () => {
                     />
                   </div>
                 </div>
-                <div className="w-full md:w-1/2 h-[400px] rounded-md overflow-hidden">
+                <div className="w-full md:w-1/2 h-[400px] rounded-md overflow-hidden self-center">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28911.023034541106!2d77.22371!3d28.6333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd7fc38a8187%3A0x7abb73aa8c418882!2sParivahan%20Vings%20(KAL)%20Private%20Limited!5e0!3m2!1sen!2sin!4v1690137192828!5m2!1sen!2sin"
                     className="w-full h-full"
@@ -200,7 +200,7 @@ export const ContactUsDesktop = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-0">
-                <label className="block text-gray-100 text-xl">Query*</label>
+                <label className="block text-gray-100 text-xl mb-2">Query*</label>
                 <textarea
                   name="message"
                   value={message}
@@ -211,7 +211,7 @@ export const ContactUsDesktop = () => {
                   required
                 />
                 <button
-                  className="bg-green-600 text-white text-lg px-12 py-4 mt-6 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-blue-300 w-fit self-center"
+                  className="bg-green-600 text-white text-lg px-12 py-4 mt-6 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-blue-300 w-fit self-end"
                   type="submit"
                 >
                   Send
