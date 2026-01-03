@@ -1,19 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { ChevronsDown } from "lucide-react";
 
 const Hero = () => {
   const scrollToAbout = () => {
     const aboutSection = document.getElementById("about");
     if (aboutSection) {
       const navbarHeight = 50;
-const animationOffset = 38; // from your motion.section initial y value
-const elementPosition = aboutSection.getBoundingClientRect().top;
-const offsetPosition = window.pageYOffset + elementPosition - navbarHeight - animationOffset;
-window.scrollTo({
-  top: offsetPosition,
-  behavior: "smooth",
-});
-
+      const animationOffset = 38; // from your motion.section initial y value
+      const elementPosition = aboutSection.getBoundingClientRect().top;
+      const offsetPosition = window.pageYOffset + elementPosition - navbarHeight - animationOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
     }
   };
 const scrollToFeatures = () => {
@@ -31,32 +31,30 @@ const scrollToFeatures = () => {
 };
 
   return (
-    <header className="relative w-full h-screen overflow-hidden">
+    <header className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center text-center px-6">
       <video
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover"
         src="/green.mp4"
         autoPlay
         muted
         loop
         playsInline
       />
-      <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50"></div>
+      
+      <div className="absolute inset-0 bg-black bg-opacity-50" />
 
-      <div className="relative z-10 flex flex-col justify-center items-center text-center h-full px-6">
-        {/* Left to right reveal by animating clipPath */}
-        <motion.h1
-  initial={{ opacity: 0, scale: 1.04 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ duration: 0.5, ease: "easeOut" }}
-  className="text-5xl md:text-7xl font-extrabold max-w-5xl leading-tight drop-shadow-lg text-white"
-  style={{ display: "inline-block" }}
->
-  <span className="text-white">Pure Prakruti: </span>
-  <span className="text-green-300">
-    Sustainable Logistics for a Better Tomorrow
-  </span>
-</motion.h1>
-
+      <div className="relative z-10 flex flex-col items-center max-w-5xl">
+        <motion.h1 
+          initial={{ opacity: 0, scale: 1.04 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          transition={{ duration: 0.5, ease: "easeOut" }} 
+          className="text-5xl md:text-7xl font-extrabold leading-tight drop-shadow-lg"
+        >
+          <span className="text-white">Pure Prakruti: </span>
+          <span className="text-green-300">
+            Sustainable Logistics for a Better Tomorrow
+          </span>
+        </motion.h1>
 
         <motion.p
           initial={{ opacity: 0 }}
@@ -74,35 +72,22 @@ const scrollToFeatures = () => {
           transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
           className="mt-10 flex flex-wrap justify-center gap-6"
         >
-          <div onClick={scrollToFeatures}>
-          <button className="bg-green-700 hover:bg-green-600 text-white text-lg font-semibold py-4 px-10 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+          <button 
+            onClick={() => scrollToAbout("features")}
+            className="bg-green-700 hover:bg-green-600 text-white text-lg font-semibold py-4 px-10 rounded-lg shadow-lg transition-transform transform hover:scale-105"
+          >
             Explore Our Solutions
           </button>
-          </div>
-          <div onClick={scrollToAbout}>
-          <button className="border-2 border-white hover:bg-white hover:text-green-700 text-white text-lg font-semibold py-4 px-10 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-            Learn More
-          </button>
-          </div>
         </motion.div>
-      </div>
 
-      <div
-        onClick={scrollToAbout}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer animate-bounce z-20"
-        aria-label="Scroll down to About section"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-12 w-12 text-white"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
       </div>
+        <button
+          onClick={() => scrollToAbout("about", 50)}
+          className="absolute bottom-12 cursor-pointer animate-bounce"
+          aria-label="Scroll down to About section"
+        >
+          <ChevronsDown size={48} color="white" />
+        </button>
     </header>
   );
 };
