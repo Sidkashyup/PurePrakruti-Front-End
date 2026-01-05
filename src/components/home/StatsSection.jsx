@@ -50,7 +50,8 @@ const StatsSection = () => {
 			<div className="container mx-auto relative z-10">
 				<div className="text-center mb-16 w-4/5 mx-auto">
 					<h2 className="text-4xl md:text-5xl font-bold mb-4">
-						Our Environmental Impact
+						<span className='text-green-300'>Our </span>
+						<span>Environmental Impact</span>
 					</h2>
 					<p className="text-green-200 text-lg md:text-2xl w-full mx-auto">
 						We're committed to making a real difference in reducing carbon

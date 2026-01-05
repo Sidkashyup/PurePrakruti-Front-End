@@ -48,7 +48,7 @@ const About = () => {
   return (
     <motion.section
       id="about"
-      className="px-6 py-20 bg-green-100 lg:bg-gradient-to-r from-green-100 via-white to-green"
+      className="px-6 py-20 bg-green-50 lg:bg-gradient-to-r from-green-100 via-white to-green"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -63,11 +63,11 @@ const About = () => {
 
       {/* Heading */}
       <div className="text-center mb-12 w-full md:w-4/5 mx-auto">
-        <h2 className="text-4xl md:text-6xl font-extrabold mb-6">
-          <span className="text-black">About </span>
+        <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <span className="text-green-900">About </span>
           <span className="text-green-700">Pure Prakruti</span>
         </h2>
-        <p className="text-lg md:text-2xl font-semibold text-gray-600 px-4 mx-auto">
+        <p className="text-lg md:text-2xl font-medium text-gray-700 px-4 mx-auto">
           Pure Prakruti is your partner in building a sustainable future. Focused on the road
           logistics industry responsible for 27% of global emissions. We provide tools and insights
           to help businesses cut their carbon footprint and drive real climate action.
@@ -75,7 +75,7 @@ const About = () => {
       </div>
 
       {/* Cards Section */}
-      <div className="flex flex-col md:flex-row w-4/5 mx-auto gap-8">
+      <div className="flex flex-col md:flex-row w-4/5 md:w-5/6 2xl:w-3/5 mx-auto gap-8">
         {cards.map((card, idx) => (
           <div
             key={idx}
@@ -87,10 +87,10 @@ const About = () => {
             whileHover={{scale: 1.05}}
           >
             {card.icon}
-            <h3 className="text-4xl md:text-5xl font-bold text-green-700 mb-4">
+            <h3 className="text-3xl md:text-4xl font-bold text-green-700 mb-2">
               {card.title}
             </h3>
-            <p className="text-gray-700 text-lg md:text-xl flex-grow">{card.description}</p>
+            <p className="text-gray-700 text-lg md:text-lg flex-grow">{card.description}</p>
           </div>
         ))}
       </div>
