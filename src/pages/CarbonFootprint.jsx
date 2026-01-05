@@ -109,17 +109,6 @@ export const CarbonFootprint = () => {
 						userId,
 					}
 				);
-				//     // const { data } = await axios.post('https://pureprakruti.com/api/vehicle/calculateEmissionAndSave', {
-				//     // userId,
-				//     // sourcePincode: formData.SourcePincode,
-				//     // destinationPincode: formData.DestinationPincode,
-				//     // vehicleData: {
-				//     //     // add more if you need
-				//     //     mobilizationDistance: formData.MobilizationDistance,
-				//     //     demobilizationDistance: formData.DemobilizationDistance,
-				//     //     loadedWeight: formData.LoadedWeight,
-				//     // }
-				// });
 				setResponse(data);
 
 				const pdfUrlData = await axios.post(
@@ -154,24 +143,28 @@ export const CarbonFootprint = () => {
 	return (
 		<div className="w-screen min-h-screen overflow-auto items-center justify-center bg-cover bg-center bg-opacity-40 relative">
 			<img
-				className="absolute top-0 left-0 w-full h-full object-cover z-0"
+				className="absolute inset-0 w-full h-full object-center"
 				src="/bglogin3.jpg"
 				alt="Background image"
 			/>
-			<div className="relative">
-				<div>
-					<h1 className="mt-28 2xl:mt-40 xl:mt-36 lg:mt-32 sm:mt-25 text-4xl font-bold text-center mb-4 text-gray-200">
+
+			<div className="absolute inset-0 bg-black/10" />
+
+			<div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-20 md:mt-24">
+				<div className="text-center mb-12">
+					<h2 className="text-4xl md:text-5xl font-bold text-gray-200 mb-4">
 						Carbon Footprint Calculator
-					</h1>
-					<h2 className="pt-4 text-3xl text-center lg:mb-6 text-green-100">
+					</h2>
+					<p className="text-lg md:text-2xl text-green-100">
 						Calculate your vehicle's environmental impact and get certified
 						emissions data
-					</h2>
+					</p>
 				</div>
-				<div className="flex justify-center items-center mb-20 bg-opacity-40">
-					<div className="bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/80 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 rounded-lg shadow-xlmax-w-3xl w-full lg:max-w-4xl xl:max-w-5xl m-4 flex flex-col justify-center">
-						<form onSubmit={handleSubmit} className="space-y-2">
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 text-gray-100">
+
+				<div className="flex justify-center">
+					<div className="bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/80 p-6 md:p-10 lg:p-12 rounded-lg shadow-xl max-w-5xl w-full">
+						<form onSubmit={handleSubmit} className="space-y-6">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								{[
 									'VechileNumber',
 									'SourcePincode',
@@ -182,16 +175,14 @@ export const CarbonFootprint = () => {
 								].map((field) => (
 									<div key={field}>
 										<label
-											className="block text-xl font-medium mb-2"
+											className="block text-xl font-medium mb-2 text-gray-100"
 											htmlFor={field}
 										>
 											{field.replace(/([A-Z])/g, ' $1').trim()}
-											{[
+											{![
 												'MobilizationDistance',
 												'DemobilizationDistance',
-											].includes(field)
-												? ''
-												: '*'}
+											].includes(field) && '*'}
 										</label>
 										<input
 											type="text"
@@ -199,7 +190,7 @@ export const CarbonFootprint = () => {
 											name={field}
 											value={formData[field] || ''}
 											onChange={handleChange}
-											className="w-full px-6 py-3 border text-xl border-white/60 rounded p-2 text-white placeholder-white/80 bg-green-700/50 backdrop-blur-md focus:outline-none focus:ring-1 focus:ring-green-400"
+											className="w-full px-6 py-3 border text-xl border-white/60 rounded text-white placeholder-white/80 bg-green-700/50 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-green-400"
 											required={
 												![
 													'MobilizationDistance',
@@ -211,12 +202,10 @@ export const CarbonFootprint = () => {
 								))}
 							</div>
 
-							<div className="pt-16 text-center justify-center">
+							<div className="w-full flex justify-end text-center">
 								<button
 									type="submit"
-									className="px-8 py-4  bg-green-600 text-white text-xl rounded-lg shadow 
-                                            hover:bg-green-700 focus:ring-2 focus:ring-blue-300 
-                                            disabled:bg-gray-400 disabled:cursor-not-allowed"
+									className="px-8 py-4 w-full md:w-fit bg-green-600 text-white text-xl rounded-lg shadow hover:bg-green-700 focus:ring-2 focus:ring-green-400 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
 									disabled={!isFirstTime && !userId}
 								>
 									Get Result
@@ -225,31 +214,32 @@ export const CarbonFootprint = () => {
 						</form>
 
 						{error && (
-							<p className="mt-4 text-red-500 text-center">Error: {error}</p>
+							<p className="mt-4 text-red-500 text-center text-lg">
+								Error: {error}
+							</p>
 						)}
 
 						{response && (
-							<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-								<div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg md:w-3/4 lg:w-1/2 xl:w-1/3 relative">
-									{/* Close Icon */}
+							<div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+								<div className="bg-white p-6 md:p-8 rounded-lg shadow-xl w-full max-w-lg">
 									<button
 										onClick={closeModal}
-										className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+										className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 transition-colors"
 									>
 										<AiOutlineClose size={24} />
 									</button>
 
-									<h2 className="text-3xl font-bold mb-4 text-center text-green-700">
+									<h2 className="text-3xl font-bold mb-6 text-center text-green-700">
 										Emission Details
 									</h2>
 
-									<div className="pl-5 space-y-2 text-green-800">
+									<div className="space-y-3 text-green-800 text-lg">
 										<p>
 											<strong>Total CO2 Emission:</strong>{' '}
 											{response.co2Emission} kg
 										</p>
 										<p>
-											<strong>VechileNumber:</strong> {response.vehicleNumber}
+											<strong>Vehicle Number:</strong> {response.vehicleNumber}
 										</p>
 										<p>
 											<strong>Certificate Issue Date:</strong>{' '}
@@ -261,30 +251,10 @@ export const CarbonFootprint = () => {
 										</p>
 									</div>
 
-									{/* Download Button */}
-									{/* {userId && pdfUrl && <button
-                                        onClick={generatePDF}
-                                        className="mt-4 flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-900 focus:ring-2 focus:ring-blue-300"
-                                    >
-                                        Download
-                                        <img src={downloadIcon} alt="Download Icon" className="w-5 h-5" />
-                                    </button>} */}
-
-									{/* {userId && pdfUrl && (
-                                        <a
-                                            href={pdfUrl}
-                                            download="certificate.pdf" target="_blank" rel="noopener noreferrer"
-                                            className="mt-4 flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-900 focus:ring-2 focus:ring-blue-300 w-32"
-                                        >
-                                            Download
-                                            <img src={downloadIcon} alt="Download Icon" className="w-5 h-5" />
-                                        </a>
-                                    )} */}
-
 									{userId && pdfUrl && (
 										<button
 											onClick={() => handleDownload(pdfUrl)}
-											className="mt-4 flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-900 focus:ring-2 focus:ring-blue-300 w-32"
+											className="mt-6 flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition-colors"
 										>
 											Download
 											<img
@@ -299,9 +269,12 @@ export const CarbonFootprint = () => {
 						)}
 
 						{showSignupMessage && (
-							<p className="mt-4 text-center text-blue-600">
+							<p className="mt-6 text-center text-blue-400 text-lg">
 								Please{' '}
-								<a href="/signup" className="underline font-medium">
+								<a
+									href="/signup"
+									className="underline font-medium hover:text-blue-300"
+								>
 									sign up
 								</a>{' '}
 								to continue tracking your carbon emissions.

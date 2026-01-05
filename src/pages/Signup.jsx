@@ -90,14 +90,14 @@ export default function Signup() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center overflow-auto relative pt-[70px]">
+    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center overflow-auto relative pt-20">
       <img
         className="absolute inset-0 w-full h-full object-cover z-0"
         src="/bglogin3.jpg"
         alt="Background image"
       />
 
-      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-full max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl p-6 sm:p-8 md:p-10 m-12 sm:mt-16">
+      <div className="relative bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-full sm:max-w-md md:max-w-xl lg:max-w-2xl p-6 sm:p-8 md:p-10 m-12 sm:mt-16">
         <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-6 text-center">Sign Up</h2>
 
         {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
@@ -111,7 +111,7 @@ export default function Signup() {
               value={formData.userName}
               onChange={handleChange}
               placeholder="Enter your name"
-              className="w-full px-3 py-3 text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 text-lg"
+              className="w-full px-3 py-3 sm:py-2 text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 text-lg"
             />
           </div>
 
@@ -154,7 +154,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full text-white py-3 text-xl rounded-md ${
+            className={`w-full text-white py-2 md:py-3 mt-3 text-xl rounded-md ${
               loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
             } transition`}
           >

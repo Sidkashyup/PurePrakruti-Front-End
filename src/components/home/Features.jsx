@@ -58,7 +58,7 @@ const Features = () => {
               whileInView={{ opacity: 1, y: 0 }}
               whileHover={{ scale: 1.05 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
+              transition={{ duration: 0.25, delay: 0.1 * index }}
             >
               <div className="w-48 h-48 mb-6 rounded-full overflow-hidden border-4 border-green-600 shadow-md">
                 <img

@@ -85,7 +85,7 @@ export const ContactUsDesktop = () => {
 			<div className="bg-green-0 relative pb-3 min-h-screen flex items-center justify-center">
 				<div className="max-w-4xl mx-auto mt-10 text-center p-5">
 					<h2 className="pt-15 text-5xl font-bold text-gray-100">Contact Us</h2>
-					<p className="text-green-100 text-3xl mt-8">
+					<p className="text-green-100 text-2xl mt-4">
 						Join the revolution in road logistics by reducing carbon emissions
 						and ensuring compliance with global environmental standards.
 					</p>
@@ -251,7 +251,7 @@ export const ContactUsDesktop = () => {
 									required
 								/>
 								<button
-									className="bg-green-600 text-white text-lg px-12 py-4 mt-6 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-blue-300 w-fit self-end"
+									className="bg-green-600 text-white text-lg py-3 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-blue-300 w-fit self-end"
 									type="submit"
 								>
 									Send

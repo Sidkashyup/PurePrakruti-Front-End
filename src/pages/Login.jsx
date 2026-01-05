@@ -89,7 +89,7 @@ export default function Login() {
       />
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
       <div className=" bg-gradient-to-r from-green-900/70 to-green-950/50 backdrop-blur-md border border-white/60 rounded-xl shadow-xl w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 sm:p-12 sm:mt-32 m-4 md:m-24 ">
-        <h2 className="text-2xl sm:text-4xl font-semibold text-white mb-4 sm:mb-6 text-center">Log In</h2>
+        <h2 className="text-4xl sm:text-4xl font-semibold text-white mb-4 sm:mb-6 text-center">Log In</h2>
 
         {error && <p className="text-red-500 text-center text-sm sm:text-lg mb-2 sm:mb-4">{error}</p>}
 
@@ -102,7 +102,7 @@ export default function Login() {
               value={formData.mobileNumber}
               onChange={handleChange}
               placeholder="Phone Number"
-              className="w-full px-3 py-2 sm:py-3 text-sm sm:text-lg text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full px-3 py-3 sm:py-2 text-sm sm:text-lg text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
@@ -114,13 +114,13 @@ export default function Login() {
               value={formData.pin}
               onChange={handleChange}
               placeholder="PIN"
-              className="w-full px-3 py-2 sm:py-3 text-sm sm:text-lg text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full px-3 py-3 sm:py-2 text-sm sm:text-lg text-white placeholder-white/90 bg-green-700/50 backdrop-blur-md border rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
 
           <button
             type="submit"
-            className={`w-full py-2 sm:py-3 text-white text-lg rounded-md ${
+            className={`w-full py-2 sm:py-3 mt-3 text-white text-lg rounded-md ${
               loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
             } transition`}
             disabled={loading}

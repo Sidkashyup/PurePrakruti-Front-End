@@ -132,20 +132,6 @@ export const ContactUsMobile = () => {
 					Query raised successfully!
 				</div>
 			)}
-
-			{/* Map */}
-			<div className="max-w-xl mx-auto mb-8 rounded-md overflow-hidden shadow-lg h-64">
-				<iframe
-					src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28911.023034541106!2d77.22371!3d28.6333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd7fc38a8187%3A0x7abb73aa8c418882!2sParivahan%20Vings%20(KAL)%20Private%20Limited!5e0!3m2!1sen!2sin!4v1690137192828!5m2!1sen!2sin"
-					width="100%"
-					height="100%"
-					style={{ border: 0 }}
-					allowFullScreen=""
-					loading="lazy"
-					title="Map"
-				/>
-			</div>
-
 			{/* Form */}
 			<form
 				onSubmit={handleOnSubmit}
@@ -205,6 +191,19 @@ export const ContactUsMobile = () => {
 					Send
 				</button>
 			</form>
+
+			{/* Map */}
+			<div className="max-w-xl mx-auto mt-8 rounded-md overflow-hidden shadow-lg h-64">
+				<iframe
+					src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28911.023034541106!2d77.22371!3d28.6333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd7fc38a8187%3A0x7abb73aa8c418882!2sParivahan%20Vings%20(KAL)%20Private%20Limited!5e0!3m2!1sen!2sin!4v1690137192828!5m2!1sen!2sin"
+					width="100%"
+					height="100%"
+					style={{ border: 0 }}
+					allowFullScreen=""
+					loading="lazy"
+					title="Map"
+				/>
+			</div>
 		</div>
 	);
 };
