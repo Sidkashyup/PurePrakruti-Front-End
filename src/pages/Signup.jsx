@@ -90,7 +90,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-green-100 flex items-center justify-center overflow-auto relative pt-[70px]">
+    <div className="w-full min-h-screen bg-green-100 flex items-center justify-center overflow-auto relative pt-20 md:pt-[70px]">
       <img
         className="absolute inset-0 w-full h-full object-cover z-0"
         src="/bglogin3.jpg"
@@ -154,9 +154,8 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full text-white py-3 text-xl rounded-md ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
-            } transition`}
+            className={`w-full text-white py-3 text-xl rounded-md ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
+              } transition`}
           >
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
@@ -197,9 +196,8 @@ export default function Signup() {
               <button
                 onClick={sendOtp}
                 disabled={otpLoading}
-                className={`w-full py-3 rounded-md text-white text-xl mt-4 ${
-                  otpLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
-                }`}
+                className={`w-full py-3 rounded-md text-white text-xl mt-4 ${otpLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
+                  }`}
               >
                 {otpLoading ? "Sending OTP..." : "Send OTP"}
               </button>
@@ -215,9 +213,8 @@ export default function Signup() {
                 <button
                   onClick={verifyOtp}
                   disabled={otpLoading}
-                  className={`w-full text-white py-3 text-xl rounded-md mt-4 ${
-                    otpLoading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
-                  } transition`}
+                  className={`w-full text-white py-3 text-xl rounded-md mt-4 ${otpLoading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+                    } transition`}
                 >
                   {otpLoading ? "Verifying OTP..." : "Verify OTP"}
                 </button>

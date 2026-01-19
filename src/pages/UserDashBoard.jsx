@@ -26,7 +26,7 @@ export const UserDashBoard = () => {
 
   const openKYCModal = () => setShowKYCModal(true);
   const closeKYCModal = () => setShowKYCModal(false);
-  
+
 
   const [dieselVehiclesData, setDieselVehiclesData] = useState([]);
   const [dieselVehiclesData1, setDieselVehiclesData1] = useState([]);
@@ -63,48 +63,48 @@ export const UserDashBoard = () => {
   }, [routeWiseEmissionData]);
 
 
-//   const refreshUser = async () => {
-//   try {
-//     const response = await axios.get(`https://pureprakruti.com/api/auth/user/${user._id}`);
-//     setUser(response.data); // ⬅️ updates AuthContext
-//   } catch (error) {
-//     console.error("❌ Failed to refresh user:", error);
-//   }
-// };
+  //   const refreshUser = async () => {
+  //   try {
+  //     const response = await axios.get(`https://pureprakruti.com/api/auth/user/${user._id}`);
+  //     setUser(response.data); // ⬅️ updates AuthContext
+  //   } catch (error) {
+  //     console.error("❌ Failed to refresh user:", error);
+  //   }
+  // };
 
-// useEffect(() => {
-//   if (user?.userId || user?._id) {
-//     refreshUser(); // ⬅️ THIS fetches full user data including KYC status
-//   }
-// }, []);
+  // useEffect(() => {
+  //   if (user?.userId || user?._id) {
+  //     refreshUser(); // ⬅️ THIS fetches full user data including KYC status
+  //   }
+  // }, []);
 
 
 
   const getDateRange = (range) => {
-  const today = new Date();
-  const endDate = today.toISOString().split("T")[0];
+    const today = new Date();
+    const endDate = today.toISOString().split("T")[0];
 
-  let startDate;
+    let startDate;
 
-  switch (range) {
-    case "Daily":
-      startDate = endDate;
-      break;
-    case "Weekly":
-      startDate = new Date(today.setDate(today.getDate() - 7)).toISOString().split("T")[0];
-      break;
-    case "Monthly":
-      startDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split("T")[0];
-      break;
-    case "Yearly":
-      startDate = new Date(today.setFullYear(today.getFullYear() - 1)).toISOString().split("T")[0];
-      break;
-    default:
-      startDate = endDate;
-  }
+    switch (range) {
+      case "Daily":
+        startDate = endDate;
+        break;
+      case "Weekly":
+        startDate = new Date(today.setDate(today.getDate() - 7)).toISOString().split("T")[0];
+        break;
+      case "Monthly":
+        startDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split("T")[0];
+        break;
+      case "Yearly":
+        startDate = new Date(today.setFullYear(today.getFullYear() - 1)).toISOString().split("T")[0];
+        break;
+      default:
+        startDate = endDate;
+    }
 
-  return { startDate, endDate };
-};
+    return { startDate, endDate };
+  };
 
 
 
@@ -193,7 +193,7 @@ export const UserDashBoard = () => {
   //     const response = await fetch(
   //       `https://pureprakruti.com/api/vehicle/carbonfootprintbyfueltype?fuelType=${selectedFuel}&${selectedDateRange}=true`
   //     );
-      
+
 
   //     if (!response.ok) {
   //       throw new Error("Failed to fetch report data");
@@ -236,65 +236,65 @@ export const UserDashBoard = () => {
   // };
 
   const downloadCSVReport = async () => {
-  try {
-    if (!selectedFuel && !selectedDateRange) {
-      alert("Please select fuel type or date range");
-      return;
+    try {
+      if (!selectedFuel && !selectedDateRange) {
+        alert("Please select fuel type or date range");
+        return;
+      }
+
+      let url = `https://pureprakruti.com/api/vehicle/carbonfootprintbyfueltype?`;
+
+      if (selectedFuel) url += `fuelType=${selectedFuel}&`;
+
+      if (selectedDateRange) {
+        const { startDate, endDate } = getDateRange(selectedDateRange);
+        url += `startDate=${startDate}&endDate=${endDate}`;
+      }
+
+      console.log("Requesting report from:", url);
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Backend error response:", errorText);
+        throw new Error("Failed to fetch report data");
+      }
+
+      const data = await response.json();
+
+      if (!data.carbonFootprintData || !data.carbonFootprintData.length) {
+        throw new Error("No carbon footprint data available");
+      }
+
+      // Generate CSV and download...
+      const csvContent = [
+        ["Date", "VechileNumber", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated", "Download PDF Link"],
+        ...data.carbonFootprintData.map((item) => [
+          item.date,
+          item.vehicleNumber,
+          item.fuelType,
+          item.carbonFootprint,
+          new Date(item.updatedAt).toLocaleDateString(),
+          item.pdfUrl ? `=("${item.pdfUrl}")` : "No PDF Available"
+        ]),
+      ]
+        .map((row) => row.join(","))
+        .join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv" });
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.setAttribute("download", `Carbon_Footprint_Report_${selectedFuel || selectedDateRange}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error("Error downloading report:", error);
     }
-
-    let url = `https://pureprakruti.com/api/vehicle/carbonfootprintbyfueltype?`;
-
-    if (selectedFuel) url += `fuelType=${selectedFuel}&`;
-
-    if (selectedDateRange) {
-      const { startDate, endDate } = getDateRange(selectedDateRange);
-      url += `startDate=${startDate}&endDate=${endDate}`;
-    }
-
-    console.log("Requesting report from:", url);
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Backend error response:", errorText);
-      throw new Error("Failed to fetch report data");
-    }
-
-    const data = await response.json();
-
-    if (!data.carbonFootprintData || !data.carbonFootprintData.length) {
-      throw new Error("No carbon footprint data available");
-    }
-
-    // Generate CSV and download...
-    const csvContent = [
-      ["Date", "VechileNumber", "Fuel Type", "Carbon Emission (kg CO2)", "Last Updated", "Download PDF Link"],
-      ...data.carbonFootprintData.map((item) => [
-        item.date,
-        item.vehicleNumber,
-        item.fuelType,
-        item.carbonFootprint,
-        new Date(item.updatedAt).toLocaleDateString(),
-        item.pdfUrl ? `=("${item.pdfUrl}")` : "No PDF Available"
-      ]),
-    ]
-      .map((row) => row.join(","))
-      .join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const blobUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.setAttribute("download", `Carbon_Footprint_Report_${selectedFuel || selectedDateRange}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-  } catch (error) {
-    console.error("Error downloading report:", error);
-  }
-};
+  };
 
 
 
@@ -344,205 +344,205 @@ export const UserDashBoard = () => {
   };
 
 
-    const handleAadharSubmit = async (formData) => {
-  try {
-    const response = await axios.post("https://pureprakruti.com/api/kyc/verify/aadhar", {
-      ...formData,
-      userId: user._id, // make sure 'user' is defined
-    });
+  const handleAadharSubmit = async (formData) => {
+    try {
+      const response = await axios.post("https://pureprakruti.com/api/kyc/verify/aadhar", {
+        ...formData,
+        userId: user._id, // make sure 'user' is defined
+      });
 
 
-    console.log("✅ Aadhar Verified:", response.data);
-    alert("Aadhar Verified Successfully!");
-        // await refreshUser();
-  } catch (error) {
-    console.error("❌ Aadhar Verification Failed:", error.response?.data || error.message);
-    alert("Aadhar verification failed.");
-  }
-};
-
-    const handlePanSubmit = async (data) => {
-  const requestBody = {
-    panno: data.panno,
-    PANFullName: data.PANFullName,
-    userId: user?.userId || user?._id,        // ✅ FIXED THIS LINE
-    code: "mock",
-    code_verifier: "mock",
-  };
-  
-
-  console.log("📤 Sending PAN request body:", requestBody);
-  console.log("🟡 User ID (should be defined):", user?.userId);
-
-  if (!requestBody.userId) {
-    alert("❌ userId is missing! Cannot proceed.");
-    return;
-  }
-
-  try {
-    const response = await axios.post("https://pureprakruti.com/api/kyc/verify/pan", requestBody);
-    console.log("✅ PAN Verified:", response.data);
-    alert("PAN Verified Successfully!");
-    // await refreshUser();
-  } catch (err) {
-    console.error("❌ PAN Verification Failed:", err?.response?.data?.message || err.message);
-    alert("PAN verification failed.");
-  }
-};
-    const handleDlSubmit = async (data) => {
-      
-  const requestBody = {
-    dlnumber: data.dlnumber,
-    dob: data.dob,
-    userId: user?.userId,
+      console.log("✅ Aadhar Verified:", response.data);
+      alert("Aadhar Verified Successfully!");
+      // await refreshUser();
+    } catch (error) {
+      console.error("❌ Aadhar Verification Failed:", error.response?.data || error.message);
+      alert("Aadhar verification failed.");
+    }
   };
 
-  console.log("🧾 User ID (should be defined):",user?.userId);
-  console.log("📤 Sending DL request:", requestBody);
+  const handlePanSubmit = async (data) => {
+    const requestBody = {
+      panno: data.panno,
+      PANFullName: data.PANFullName,
+      userId: user?.userId || user?._id,        // ✅ FIXED THIS LINE
+      code: "mock",
+      code_verifier: "mock",
+    };
 
-  try {
-    const response = await axios.post("https://pureprakruti.com/api/kyc/verify/drivingLicence", requestBody);
-    console.log("✅ DL Verified:", response.data);
-    alert("Driving License Verified Successfully!");
-    // await refreshUser();
-  } catch (error) {
-    console.error("❌ DL Verification Failed:", error?.response?.data?.message || error.message);
-    alert("DL verification failed.");
-  }
-};
+
+    console.log("📤 Sending PAN request body:", requestBody);
+    console.log("🟡 User ID (should be defined):", user?.userId);
+
+    if (!requestBody.userId) {
+      alert("❌ userId is missing! Cannot proceed.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("https://pureprakruti.com/api/kyc/verify/pan", requestBody);
+      console.log("✅ PAN Verified:", response.data);
+      alert("PAN Verified Successfully!");
+      // await refreshUser();
+    } catch (err) {
+      console.error("❌ PAN Verification Failed:", err?.response?.data?.message || err.message);
+      alert("PAN verification failed.");
+    }
+  };
+  const handleDlSubmit = async (data) => {
+
+    const requestBody = {
+      dlnumber: data.dlnumber,
+      dob: data.dob,
+      userId: user?.userId,
+    };
+
+    console.log("🧾 User ID (should be defined):", user?.userId);
+    console.log("📤 Sending DL request:", requestBody);
+
+    try {
+      const response = await axios.post("https://pureprakruti.com/api/kyc/verify/drivingLicence", requestBody);
+      console.log("✅ DL Verified:", response.data);
+      alert("Driving License Verified Successfully!");
+      // await refreshUser();
+    } catch (error) {
+      console.error("❌ DL Verification Failed:", error?.response?.data?.message || error.message);
+      alert("DL verification failed.");
+    }
+  };
 
 
   return (
-    <div className='w-screen'>
+    <div className='w-full'>
       <div
         style={{ backgroundImage: `url(${natureImg})` }}
         className="w-full min-h-[100px] bg-cover bg-center bg-no-repeat text-white p-6 text-center flex flex-wrap items-center justify-between"
       >
-        <div className="text-lg md:text-2xl lg:text-3xl font-bold w-full md:w-[30%] lg:w-[20%] text-center md:text-left">
+        <div className="text-xl md:text-2xl lg:text-3xl font-bold w-full md:w-[40%] lg:w-[30%] text-center md:text-left">
           Carbon Emission Analysis
         </div>
       </div>
 
 
       <div className="fixed top-5 right-32 z-50">
-  <button 
-    onClick={openKYCModal}
-    className="bg-green-600 hover:bg-green-700 text-white text-2xl px-6 py-3 rounded-full shadow-lg"
-  >
-    Verify KYC
-  </button>
-</div>
+        <button
+          onClick={openKYCModal}
+          className="bg-green-600 hover:bg-green-700 text-white text-lg md:text-2xl px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg"
+        >
+          Verify KYC
+        </button>
+      </div>
 
-{showKYCModal && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-green-900 backdrop-blur-md w-full max-w-3xl p-8 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh] border-white/60 border">
-      {/* Close Button */}
-      <button 
-        onClick={closeKYCModal}
-        className="absolute top-3 right-4 text-white hover:text-red-500 text-4xl"
-      >
-        &times;
-      </button>
+      {showKYCModal && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-green-900 backdrop-blur-md w-full max-w-3xl p-8 rounded-lg shadow-lg relative overflow-y-auto max-h-[90vh] border-white/60 border">
+            {/* Close Button */}
+            <button
+              onClick={closeKYCModal}
+              className="absolute top-3 right-4 text-white hover:text-red-500 text-4xl"
+            >
+              &times;
+            </button>
 
-      <h2 className="text-3xl font-semibold mb-4 text-gray-100">KYC Verification</h2>
+            <h2 className="text-3xl font-semibold mb-4 text-gray-100">KYC Verification</h2>
 
-      <KYCSection
-  title="Aadhar Verification"
-  verified={user.kyc?.aadhar?.verified}
-  fields={[
-    { label: "Aadhar Number", key: "uid" },
-    { label: "Name", key: "name" },
-    { label: "DOB (YYYYMMDD)", key: "dob" },
-    { label: "Gender (M/F)", key: "gender" },
-    { label: "Mobile", key: "mobile" }
-  ]}
-  onSubmit={handleAadharSubmit}
-/>
-<KYCSection
-  title="PAN Verification"
-  verified={user?.kyc?.pan?.verified}
-  fields={[
-    { key: "panno", label: "PAN Number" },
-    { key: "PANFullName", label: "Full Name (as per PAN)" },
-  ]}
-  user={user} 
-  onSubmit={handlePanSubmit}
-/>
-<KYCSection
-  title="Driving License Verification"
-  verified={user?.kyc?.drivingLicence?.verified}
-  fields={[
-    { key: "dlnumber", label: "DL Number" },
-    { key: "dob", label: "DOB (YYYYMMDD)" }
-  ]}
-  onSubmit={handleDlSubmit}
-/>
-    </div>
-  </div>
-)}
-
-
-      
+            <KYCSection
+              title="Aadhar Verification"
+              verified={user.kyc?.aadhar?.verified}
+              fields={[
+                { label: "Aadhar Number", key: "uid" },
+                { label: "Name", key: "name" },
+                { label: "DOB (YYYYMMDD)", key: "dob" },
+                { label: "Gender (M/F)", key: "gender" },
+                { label: "Mobile", key: "mobile" }
+              ]}
+              onSubmit={handleAadharSubmit}
+            />
+            <KYCSection
+              title="PAN Verification"
+              verified={user?.kyc?.pan?.verified}
+              fields={[
+                { key: "panno", label: "PAN Number" },
+                { key: "PANFullName", label: "Full Name (as per PAN)" },
+              ]}
+              user={user}
+              onSubmit={handlePanSubmit}
+            />
+            <KYCSection
+              title="Driving License Verification"
+              verified={user?.kyc?.drivingLicence?.verified}
+              fields={[
+                { key: "dlnumber", label: "DL Number" },
+                { key: "dob", label: "DOB (YYYYMMDD)" }
+              ]}
+              onSubmit={handleDlSubmit}
+            />
+          </div>
+        </div>
+      )}
 
 
-      <div className="min-h-full px-24 py-8 relative">
+
+
+
+      <div className="min-h-full px-4 sm:px-8 md:px-16 lg:px-24 py-8 relative">
         <div>
-          
+
           <img className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-90" src="/bglogin3.jpg" alt="Background image" />
           {/* <div className=" relative text-lg md:text-2xl lg:text-3xl font-bold w-full md:w-[30%] lg:w-[20%] text-center md:text-left text-white mt-4 mb-12">
           Carbon Emission Analysis
         </div> */}
 
-          
 
-        <motion.div
-          className="flex justify-center align-middle mt-4 px-40 relative"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="text-white w-5/6">
-            {/* Container for Cards */}
-            <div className="flex flex-wrap justify-center md:justify-between gap-6">
-              {/* Top Emitting Vehicle */}
-              {/* {topEmittingVehicle && (
+
+          <motion.div
+            className="flex justify-center align-middle mt-4 lg:px-40 relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="text-white w-5/6">
+              {/* Container for Cards */}
+              <div className="flex flex-wrap justify-center md:justify-between gap-6">
+                {/* Top Emitting Vehicle */}
+                {/* {topEmittingVehicle && (
                 
               )} */}
 
-              <motion.div
-                className="bg-gradient-to-r from-green-600/80 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] min-w-[350px] w-full sm:w-1/3 md:w-1/3 lg:w-2/4 xl:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <div className="font-bold text-2xl text-white">{`🚛 GreenLine Freight: ${topEmittingVehicle?.vehicleNumber ?? 'N/A'}`}</div>
-                <h1 className="text-gray-200 text-xl mt-2">Top Emitting Vehicle</h1>
-              </motion.div>
+                <motion.div
+                  className="bg-gradient-to-r from-green-600/80 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] w-full sm:w-[45%] lg:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <div className="font-bold text-2xl text-white">{`🚛 GreenLine Freight: ${topEmittingVehicle?.vehicleNumber ?? 'N/A'}`}</div>
+                  <h1 className="text-gray-200 text-xl mt-2">Top Emitting Vehicle</h1>
+                </motion.div>
 
-              {/* Total Vehicles */}
-              <motion.div
-                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] min-w-[350px] w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                <div className="font-bold text-2xl text-white">{`🚗 Total Vehicles: ${totalVehicles}`}</div>
-                <h1 className="text-gray-200 text-xl mt-2">Total Vehicles Registered</h1>
-              </motion.div>
+                {/* Total Vehicles */}
+                <motion.div
+                  className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] w-full sm:w-[45%] lg:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <div className="font-bold text-2xl text-white">{`🚗 Total Vehicles: ${totalVehicles}`}</div>
+                  <h1 className="text-gray-200 text-xl mt-2">Total Vehicles Registered</h1>
+                </motion.div>
 
-              {/* Total Carbon Emission */}
-              <motion.div
-                className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] min-w-[350px] w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <div className="font-bold text-2xl text-white">{`🌱 Total Emission: ${totalEmission.toFixed(2)} kg`}</div>
-                <h1 className="text-gray-200 text-xl mt-2">Total Carbon Emission</h1>
-              </motion.div>
+                {/* Total Carbon Emission */}
+                <motion.div
+                  className="bg-gradient-to-r from-green-700 to-green-900 p-6 rounded-xl shadow-lg min-h-[170px] w-full sm:w-[45%] lg:w-1/4 text-center border border-gray-300 hover:shadow-xl transform transition duration-300 hover:scale-105"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
+                  <div className="font-bold text-2xl text-white">{`🌱 Total Emission: ${totalEmission.toFixed(2)} kg`}</div>
+                  <h1 className="text-gray-200 text-xl mt-2">Total Carbon Emission</h1>
+                </motion.div>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
         </div>
 
 
@@ -564,7 +564,7 @@ export const UserDashBoard = () => {
                     colors: ["#004d0d"], // Green color
                     legend: { position: "none" }, // Hide legend if not needed
                     chartArea: { width: "90%" }, // Adjust chart area
-                     backgroundColor: '#e3ffea'
+                    backgroundColor: '#e3ffea'
                   }}
                   data={[
                     ["Date", "CO2 Emission (kg)"],
@@ -598,10 +598,10 @@ export const UserDashBoard = () => {
             <h2 className="text-2xl font-bold mb-2 text-white text-center">
               Route-wise Emissions
             </h2>
-            
+
             <div className="w-full min-h-[350px] flex justify-center items-center">
               {routeWiseEmissionData.length > 0 ? (
-                <Chart chartType="PieChart" width="100%" height="370px" data={data}  options={options}  />
+                <Chart chartType="PieChart" width="100%" height="370px" data={data} options={options} />
               ) : (
                 <p className="text-gray-500 text-lg">No data available</p>
               )}
@@ -616,28 +616,28 @@ export const UserDashBoard = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-3xl font-bold m-4 text-white">Fleet Emission Overview</h2>
-          <div className="overflow-auto max-h-128 custom-scrollbar">
-            <table className="w-full border-collapse border border-gray-300">
+          <h2 className="text-2xl sm:text-3xl font-bold m-4 text-white">Fleet Emission Overview</h2>
+          <div className="overflow-x-auto max-h-128 custom-scrollbar">
+            <table className="w-full border-collapse border border-gray-300 min-w-[600px]">
               <thead>
-                <tr className="bg-green-700 text-xl text-white">
-                  <th className="border p-6">Vehicle Number</th>
-                  <th className="border p-6">Fuel Type</th>
-                  <th className="border p-6">CO2 Emission (kg)</th>
-                  <th className="border p-6">Distance (km)</th>
-                  <th className="border p-6">Last Updated</th>
-                  <th className="border p-6">Download PDF</th>
+                <tr className="bg-green-700 text-lg md:text-xl text-white">
+                  <th className="border p-4 md:p-6">Vehicle Number</th>
+                  <th className="border p-4 md:p-6">Fuel Type</th>
+                  <th className="border p-4 md:p-6">CO2 Emission (kg)</th>
+                  <th className="border p-4 md:p-6">Distance (km)</th>
+                  <th className="border p-4 md:p-6">Last Updated</th>
+                  <th className="border p-4 md:p-6">Download PDF</th>
                 </tr>
               </thead>
               <tbody>
                 {dieselVehiclesData1.map((item, index) => (
-                  <tr key={index} className="text-center text-xl text-white">
-                    <td className="border p-6">{item.vehicleNumber}</td>
-                    <td className="border p-6">{item.fuelType}</td>
-                    <td className="border p-6">{item.carbonFootprint} kg</td>
-                    <td className="border p-6">{item.totalDistance} km</td>
-                    <td className="border p-6">{new Date(item.updatedAt).toLocaleDateString()}</td>
-                    <td className="border p-6">
+                  <tr key={index} className="text-center text-lg md:text-xl text-white">
+                    <td className="border p-4 md:p-6">{item.vehicleNumber}</td>
+                    <td className="border p-4 md:p-6">{item.fuelType}</td>
+                    <td className="border p-4 md:p-6">{item.carbonFootprint} kg</td>
+                    <td className="border p-4 md:p-6">{item.totalDistance} km</td>
+                    <td className="border p-4 md:p-6">{new Date(item.updatedAt).toLocaleDateString()}</td>
+                    <td className="border p-4 md:p-6">
                       <button
                         onClick={() => handleDownload(item.pdfUrl)}
                         className="text-white px-2 py-1  items-center"
@@ -655,14 +655,14 @@ export const UserDashBoard = () => {
 
 
 
-      
+
 
 
 
         {/* Download Report Button */}
         <div className="text-center mt-6 relative" >
           <button
-            className="bg-green-600 text-white px-6 py-3 rounded-lg text-2xl hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg text-xl md:text-2xl hover:bg-green-700 focus:ring-2 focus:ring-blue-300"
             onClick={() => setIsModalOpen(true)}
           >
             Download Report
@@ -671,8 +671,8 @@ export const UserDashBoard = () => {
 
         {/* Modal Component */}
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gradient-to-br from-green-800 to-green-900/90 backdrop-blur-md p-8 rounded-lg shadow-xl w-[700px] relative text-white border border-white/60">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[100] px-4">
+            <div className="bg-gradient-to-br from-green-800 to-green-900/90 backdrop-blur-md p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-2xl relative text-white border border-white/60">
               <div className="flex border-b pb-2">
                 <button
                   className={`w-1/2 text-lg font-bold px-4 py-2 ${activeTab === "fuel" ? "text-gray-100 border-b-2 border-green-600" : "text-gray-300"}`}
@@ -723,7 +723,7 @@ export const UserDashBoard = () => {
                   ))}
                 </div>
               )}
-              
+
 
               <div className="text-center mt-4">
                 <button
@@ -744,7 +744,7 @@ export const UserDashBoard = () => {
                 &times;
               </button>
             </div>
-            
+
           </div>
         )}
       </div>

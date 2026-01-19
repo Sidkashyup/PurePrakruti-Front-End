@@ -31,35 +31,33 @@ export const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-200 ease-in-out 
       ${scrolled ? "bg-green-950/90 backdrop-blur-sm text-white " : "bg-transparent text-white "}`}
     >
-      <div className="flex items-center justify-between max-w-[1240px] mx-auto px-4 py-3">
+      <div className="flex items-center justify-between max-w-[1240px] mx-auto px-4 py-2.5">
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-6">
-          <img src={pure} alt="Pure Prakrti" className="h-20 w-auto" />
-          <span className="text-3xl font-bold text-white">Pure Prakruti</span>
+        <Link to="/" className="flex items-center space-x-2 md:space-x-4">
+          <img src={pure} alt="Pure Prakrti" className="h-9 md:h-16 w-auto" />
+          <span className="text-xl md:text-2xl font-bold text-white">Pure Prakruti</span>
         </Link>
 
         {/* Centered Nav Links */}
         <div
-          className={`hidden md:flex flex-1 justify-center items-center space-x-8 text-xl font-semibold transition 
+          className={`hidden md:flex flex-1 justify-center items-center space-x-4 lg:space-x-6 text-lg font-semibold transition 
           ${scrolled ? "text-white" : "text-white"}`}
         >
           <Link
             to="/"
-            className={`hover:text-green-500 transition ${
-              currentPath === "/"
-                ? "text-green-500 underline underline-offset-8"
-                : ""
-            }`}
+            className={`hover:text-green-500 transition ${currentPath === "/"
+              ? "text-green-500 underline underline-offset-8"
+              : ""
+              }`}
           >
             Home
           </Link>
           <Link
             to="/carbonfootprint"
-            className={`hover:text-green-500 transition ${
-              currentPath === "/carbonfootprint"
-                ? "text-green-500 underline underline-offset-8"
-                : ""
-            }`}
+            className={`hover:text-green-500 transition ${currentPath === "/carbonfootprint"
+              ? "text-green-500 underline underline-offset-8"
+              : ""
+              }`}
           >
             Carbon Footprints
           </Link>
@@ -67,11 +65,10 @@ export const Navbar = () => {
           {user && (
             <Link
               to="/UserDashBoard"
-              className={`hover:text-green-500 transition ${
-                currentPath === "/UserDashBoard"
-                  ? "text-green-500 underline underline-offset-8"
-                  : ""
-              }`}
+              className={`hover:text-green-500 transition ${currentPath === "/UserDashBoard"
+                ? "text-green-500 underline underline-offset-8"
+                : ""
+                }`}
             >
               Dashboard
             </Link>
@@ -79,12 +76,11 @@ export const Navbar = () => {
 
           <Link
             to="/contactUs"
-            className={`px-6 py-3 rounded-full text-xl font-semibold transition 
-    ${
-      currentPath === "/contactUs"
-        ? "bg-green-600 text-white "
-        : "bg-green-600 text-white hover:bg-green-700"
-    }`}
+            className={`px-5 py-2.5 rounded-full text-lg font-semibold transition 
+    ${currentPath === "/contactUs"
+                ? "bg-green-600 text-white "
+                : "bg-green-600 text-white hover:bg-green-700"
+              }`}
           >
             Contact Us
           </Link>
@@ -92,26 +88,24 @@ export const Navbar = () => {
 
         {/* Right Side: Login/User */}
         <div
-          className={`hidden md:flex items-center gap-4 ${
-            scrolled ? "text-gray-800" : "text-gray-800"
-          }`}
+          className={`hidden md:flex items-center gap-4 ${scrolled ? "text-gray-800" : "text-gray-800"
+            }`}
         >
           {user ? (
             <div className="cursor-pointer" onClick={toggleModal}>
               <img
                 src="https://www.w3schools.com/w3images/avatar2.png"
                 alt="User"
-                className="h-16 w-16 rounded-full"
+                className="h-12 w-12 md:h-14 md:h-14 rounded-full"
               />
             </div>
           ) : (
             <>
               <button
                 className={`px-5 py-2 rounded-lg border font-semibold transition 
-                  ${
-                    scrolled
-                      ? "bg-green-600 text-white border-green-600 hover:bg-green-700"
-                      : "bg-white text-green-600 border-green-600 hover:bg-gray-100"
+                  ${scrolled
+                    ? "bg-green-600 text-white border-green-600 hover:bg-green-700"
+                    : "bg-white text-green-600 border-green-600 hover:bg-gray-100"
                   }`}
                 onClick={() => navigate("/login")}
               >
@@ -119,10 +113,9 @@ export const Navbar = () => {
               </button>
               <button
                 className={`px-5 py-2 rounded-lg border font-semibold transition
-                  ${
-                    scrolled
-                      ? "bg-white text-green-600 border-green-600 hover:bg-gray-100"
-                      : "bg-green-600 text-white border-green-600 hover:bg-green-700"
+                  ${scrolled
+                    ? "bg-white text-green-600 border-green-600 hover:bg-gray-100"
+                    : "bg-green-600 text-white border-green-600 hover:bg-green-700"
                   }`}
                 onClick={() => navigate("/signup")}
               >
@@ -134,7 +127,7 @@ export const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-inherit"
+          className="md:hidden text-inherit p-2 hover:bg-white/10 rounded-lg transition-colors"
           onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
         >
           <IoReorderThreeOutline size={30} />

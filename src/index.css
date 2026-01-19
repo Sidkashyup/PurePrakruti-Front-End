@@ -2,19 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply font-['Outfit'] text-gray-900;
+  }
+}
 
-.prop{
-    letter-spacing: 4rem;
+
+.prop {
+  letter-spacing: 4rem;
 
 
 }
-.text_properties{
-    text-shadow: 0 0.5em rgb(85 227 34 / 33%), 0 0.8em rgb(85 227 34 / 16%), 0 2.3em rgb(85,227,34,0.1), 0 -0.5em rgb(85 227 34 / 30%), 0 -0.8em rgb(85 227 34 / 16%);
+
+.text_properties {
+  text-shadow: 0 0.5em rgb(85 227 34 / 33%), 0 0.8em rgb(85 227 34 / 16%), 0 2.3em rgb(85, 227, 34, 0.1), 0 -0.5em rgb(85 227 34 / 30%), 0 -0.8em rgb(85 227 34 / 16%);
 }
 
-.wrapper{
-    perspective: 10px;
-    overflow-x: hidden;
+.wrapper {
+  perspective: 10px;
+  overflow-x: hidden;
 
 }
 
@@ -22,6 +29,7 @@
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -44,16 +52,19 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #14532d; /* dark green track */
+  background: #14532d;
+  /* dark green track */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4ade80; /* light green thumb */
+  background: #4ade80;
+  /* light green thumb */
   border-radius: 2px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #22c55e; /* brighter on hover */
+  background: #22c55e;
+  /* brighter on hover */
 }
 
 body::-webkit-scrollbar {
@@ -61,21 +72,26 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-  background: #14532d;  /* dark green track */
+  background: #14532d;
+  /* dark green track */
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #4ade80;  /* light green thumb */
+  background: #4ade80;
+  /* light green thumb */
   border-radius: 5px;
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background: #22c55e;  /* brighter green on hover */
+  background: #22c55e;
+  /* brighter green on hover */
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px #114623 inset;  /* Tailwind's gray-800, change as needed */
-  -webkit-text-fill-color: white;  /* change text color if needed */
+  -webkit-box-shadow: 0 0 0px 1000px #114623 inset;
+  /* Tailwind's gray-800, change as needed */
+  -webkit-text-fill-color: white;
+  /* change text color if needed */
   -webkit-text-size-adjust: auto;
 }
 
